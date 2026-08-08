@@ -45,19 +45,6 @@ export default function HomePage() {
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 h-96 w-[36rem] rounded-full bg-[#FF7A00]/8 blur-3xl pointer-events-none" />
 
         <div className="relative z-10 mx-auto max-w-5xl text-center space-y-7">
-          {/* Location & Badge Tag */}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-white border border-[#EBE4D8] shadow-xs text-xs font-bold text-[#111113]"
-          >
-            <MapPin className="h-3.5 w-3.5 text-[#FF7A00]" />
-            <span>Ahmedabad, Gujarat</span>
-            <span className="text-[#D1C7B7]">•</span>
-            <span className="text-[#666668] font-medium">Software & AI Product Consultancy</span>
-          </motion.div>
-
           {/* Main Headline */}
           <motion.h1
             initial={{ opacity: 0, y: 25 }}
