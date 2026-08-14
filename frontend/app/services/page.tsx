@@ -1,241 +1,387 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Code2,
   Globe,
+  Code2,
   Smartphone,
-  Server,
   BrainCircuit,
   Palette,
-  Cpu,
-  Calculator,
-  ArrowRight,
+  Network,
+  Building2,
+  Server,
   Sparkles,
+  Layers,
+  CheckCircle2,
 } from 'lucide-react';
 
 import Service3DCard from '@/components/animations/Service3DCard';
-import Card3DTilt from '@/components/animations/Card3DTilt';
-import InteractiveGridBoxes from '@/components/animations/InteractiveGridBoxes';
 import GetQuoteModal from '@/components/modals/GetQuoteModal';
+
+const categoryFilters = [
+  { id: 'all', label: 'All Capabilities', count: 8 },
+  { id: 'web', label: 'Web & SaaS', count: 3 },
+  { id: 'mobile', label: 'Mobile Apps', count: 1 },
+  { id: 'ai', label: 'AI & Intelligence', count: 1 },
+  { id: 'design', label: 'UI/UX Systems', count: 1 },
+  { id: 'cloud', label: 'Cloud & API', count: 2 },
+];
 
 const servicesList = [
   {
-    id: 'custom-dev',
-    type: 'Custom Development',
-    title: 'Custom Development',
-    icon: Code2,
+    id: '01',
+    serviceNumber: '01',
+    category: 'web',
+    type: 'Website Dev',
+    title: 'Custom Website Development',
+    targetAudience: 'For: Businesses, startups, professionals & local brands.',
+    icon: Globe,
     image: '/images/custom-dev.png',
-    desc: 'Bespoke software architecture engineered specifically to power your unique business logic. We build resilient backend systems, custom APIs, data pipelines, and scalable microservices.',
+    metricsBadge: '⚡ Sub-Second Load Speed',
+    desc: 'Are you looking for bespoke, high-performance web development which is secure, scalable, and simple to adapt and deploy? You can count upon our talented engineering team with exceptional web experience to solve your complex business problems.',
+    subDesc: 'On understanding and analyzing the objectives of your business strategy, we ensure on-time achievement of outcomes by following a rigorous quality process at all stages of our association, right from discovery to deployment and maintenance.',
     bullets: [
-      'Tailored business logic & microservices architecture',
-      'Scalable Python, Node.js & Go backend engines',
-      'RESTful & gRPC enterprise API engineering',
-      'Database optimization, caching & secure data pipelines',
+      'Custom web development',
+      'Enterprise web application',
+      'CRM Application',
+      'Mobile Backend / API Development',
+      'Content Management System',
+      'ERP Software',
     ],
-    tags: ['Next.js', 'Node.js', 'Python', 'Microservices', 'GraphQL'],
+    tags: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'Django', 'PostgreSQL'],
+    ctaLabel: 'Book Custom Website Service →',
   },
   {
-    id: 'app-dev',
-    type: 'App',
-    title: 'App Development',
+    id: '02',
+    serviceNumber: '02',
+    category: 'web',
+    type: 'Core Software',
+    title: 'Website Application Development',
+    targetAudience: 'Core Software Development Service for Scalable Digital Products',
+    icon: Code2,
+    image: '/images/web-dev.png',
+    metricsBadge: '🚀 99.99% SaaS Uptime',
+    desc: 'Architecting robust, enterprise-grade web applications, SaaS platforms, and internal management engines with secure role-based access, real-time telemetry, and high throughput.',
+    subDesc: 'We align full-stack frontend reactive frameworks with battle-tested Python Django and FastAPI backends, delivering seamless API performance, relational database scaling, and zero-latency operational workflows.',
+    bullets: [
+      'Custom Web Applications & SaaS',
+      'Admin Dashboards & Management Tools',
+      'CRM & ERP Enterprise Systems',
+      'Authentication & Role-Based RBAC',
+      'Real-Time WebSockets & Telemetry',
+      'Scalable Third-Party API Integrations',
+    ],
+    tags: ['Python', 'Django', 'FastAPI', 'Next.js', 'PostgreSQL', 'Redis'],
+    ctaLabel: 'Book Web App Development →',
+  },
+  {
+    id: '03',
+    serviceNumber: '03',
+    category: 'mobile',
+    type: 'Mobile Apps',
+    title: 'Mobile App Development',
+    targetAudience: 'Cross-Platform Native Experience for B2B & B2C Apps',
     icon: Smartphone,
     image: '/images/app-dev.png',
-    desc: 'Native and cross-platform mobile app development engineered for smooth performance across iOS and Android. Features offline sync, biometric security, and real-time state management.',
+    metricsBadge: '📱 iOS & Android Native',
+    desc: 'Designing and building cross-platform native iOS and Android mobile applications powered by React Native and Flutter, with offline synchronization and push notifications.',
+    subDesc: 'From consumer apps with smooth gesture animations to enterprise field-work telemetry tools, our mobile solutions are engineered for battery efficiency, low memory footprint, and instant App Store & Play Store compliance.',
     bullets: [
-      'React Native & Flutter iOS / Android app deployment',
-      'Offline-first architecture with encrypted local storage',
-      'Push notification workflows & background task handling',
-      'Seamless App Store & Google Play publishing pipeline',
+      'React Native & Flutter Cross-Platform',
+      'Native iOS (Swift) & Android (Kotlin)',
+      'Offline-First Data Sync & Storage',
+      'Biometric Auth & Secure Hardware Vaults',
+      'In-App Payments (Stripe, Razorpay, Apple Pay)',
+      'Real-Time Location Tracking & Maps',
     ],
-    tags: ['React Native', 'Flutter', 'iOS', 'Android', 'WebSockets'],
+    tags: ['React Native', 'Flutter', 'iOS', 'Android', 'REST APIs', 'Firebase'],
+    ctaLabel: 'Book Mobile App Service →',
   },
   {
-    id: 'web-dev',
-    type: 'Website',
-    title: 'Web Development',
-    icon: Globe,
-    image: '/images/web-dev.png',
-    desc: 'High-speed, SEO-optimized modern websites and web applications built with Next.js 16, React 19, and rich 3D animations. Designed for ultra-fast load times and flawless user conversions.',
-    bullets: [
-      'Next.js 16 App Router & Server Components optimization',
-      'Interactive 3D WebGL graphics & smooth animations',
-      'SEO metadata architecture & automated schema generation',
-      'Headless CMS integration (Sanity, Strapi, Contentful)',
-    ],
-    tags: ['Next.js 16', 'React 19', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
-  },
-  {
-    id: 'devops-services',
-    type: 'DevOps',
-    title: 'DevOps Services',
-    icon: Server,
-    image: '/images/devops-services.png',
-    desc: 'Automated CI/CD pipelines, cloud infrastructure management, Kubernetes orchestration, and 24/7 telemetry monitoring to guarantee 99.99% uptime and zero-downtime deployments.',
-    bullets: [
-      'AWS / GCP Cloud migration & Infrastructure as Code (Terraform)',
-      'Docker containerization & Kubernetes cluster orchestration',
-      'Automated CI/CD GitHub Actions & GitLab deployment pipelines',
-      'Real-time metrics, logging & Prometheus/Grafana monitoring',
-    ],
-    tags: ['AWS', 'Docker', 'Kubernetes', 'Terraform', 'CI/CD'],
-  },
-  {
-    id: 'ai-dev',
-    type: 'AI Solution',
+    id: '04',
+    serviceNumber: '04',
+    isStar: true,
+    category: 'ai',
+    type: '⭐ AI Engine',
     title: 'AI Development & Integration',
+    targetAudience: '⭐ Yukti Engineering Suite — AI Differentiator Service',
     icon: BrainCircuit,
     image: '/images/ai-dev.png',
-    desc: 'End-to-end AI capabilities including LLM fine-tuning, RAG vector pipelines, computer vision, and autonomous AI agents designed to automate complex business workflows.',
+    metricsBadge: '🧠 Real-Time LLM Pipeline',
+    desc: 'Unlocking competitive advantage by embedding customized AI pipelines, Large Language Model (LLM) agents, automated document intelligence, and predictive machine learning models directly into your business software.',
+    subDesc: 'We specialize in RAG (Retrieval-Augmented Generation), vector databases, intelligent speech-to-text workflows, and automated decision engines using PyTorch, OpenAI, and LangChain.',
     bullets: [
-      'Custom LLM agent workflows & RAG vector search',
-      'Computer vision & OCR document processing engines',
-      'Predictive analytics & machine learning models',
-      'Seamless OpenAI, Anthropic & Llama model integrations',
+      'Custom LLM Fine-Tuning & Prompt Pipelines',
+      'Retrieval-Augmented Generation (RAG)',
+      'Vector Search (Pinecone, ChromaDB, pgvector)',
+      'Intelligent Speech-to-Text & Voice Agents',
+      'Predictive Analytics & Automated ML Models',
+      'AI Chatbots & Conversational Workflows',
     ],
-    tags: ['Python', 'PyTorch', 'OpenAI API', 'LangChain', 'Vector DB'],
+    tags: ['Python', 'PyTorch', 'OpenAI', 'LangChain', 'Pinecone', 'FastAPI'],
+    ctaLabel: 'Book AI Development Service →',
   },
   {
-    id: 'ui-ux',
-    type: 'UI-UX',
-    title: 'UI/UX Design & Design Systems',
+    id: '05',
+    serviceNumber: '05',
+    category: 'design',
+    type: 'Product Design',
+    title: 'UI/UX & Product Design',
+    targetAudience: 'Human-Centered Interface Design & Interactive Prototyping',
     icon: Palette,
     image: '/images/ui-ux-design.png',
-    desc: 'Human-centered user interface design, interactive Figma prototypes, component libraries, and glassmorphic aesthetic systems built to engage and retain users.',
+    metricsBadge: '✨ High-Converting UX',
+    desc: 'Crafting intuitive, human-centered UI/UX design systems, interactive prototypes, and high-converting web and mobile interfaces that turn casual visitors into loyal users.',
+    subDesc: 'We combine deep user behavior research, wireframing, component-driven Figma design tokens, and WCAG accessibility standards to ensure every screen is visually stunning and functionally frictionless.',
     bullets: [
-      'High-fidelity Figma interactive wireframes & prototypes',
-      'Scalable design tokens & design system creation',
-      'Accessibility compliance (WCAG 2.1 AA standard)',
-      'Micro-animation & responsive UI design',
+      'Figma Design Tokens & UI Component Libraries',
+      'Wireframing & Interactive High-Fi Prototypes',
+      'User Journey Mapping & Persona Research',
+      'Design System Documentation & Handoff',
+      'WCAG Accessibility & Responsive Grid Math',
+      'Micro-Animations & Motion Design Specs',
     ],
-    tags: ['Figma', 'UI/UX Design', 'Design Systems', 'Prototyping', 'WCAG AA'],
+    tags: ['Figma', 'UI/UX Design', 'Design Systems', 'Wireframing', 'Prototyping', 'User Research'],
+    ctaLabel: 'Book UI/UX Design Service →',
+    processFlow: ['Discovery', 'Wireframing', 'UI Components', 'Prototypes', 'Handoff'],
   },
   {
-    id: 'enterprise-software',
-    type: 'Other',
-    title: 'Enterprise Software Services',
-    icon: Cpu,
-    image: '/images/enterprise-software.png',
-    desc: 'Legacy monolith modernization, enterprise security auditing, cloud re-platforming, and custom internal tools to accelerate organizational efficiency.',
+    id: '06',
+    serviceNumber: '06',
+    category: 'cloud',
+    type: 'API & Microservices',
+    title: 'API Development & Integration',
+    targetAudience: 'High-Throughput Enterprise Data Pipelines & Third-Party Integration',
+    icon: Network,
+    image: '/images/api-integration.png',
+    metricsBadge: '🔒 Zero-Latency Gateways',
+    desc: 'Designing and building high-throughput RESTful and GraphQL APIs, asynchronous event queues, and decoupled microservices architectures for complex software ecosystems.',
+    subDesc: 'Whether integrating legacy banking gateways, CRM platforms, or building scalable public API developer portals, we ensure 99.99% uptime, rate-limiting, and end-to-end data encryption.',
     bullets: [
-      'Monolith to microservices refactoring & API gateways',
-      'Security penetration testing & compliance audits',
-      'Redis distributed caching & SQL database tuning',
-      'Custom enterprise ERP & CRM software tools',
+      'RESTful & GraphQL API Engineering',
+      'Asynchronous Event Queues (Celery, Redis)',
+      'Microservices Decoupling & Gateway Routing',
+      'Third-Party Payment & SaaS Integrations',
+      'API Security, Rate-Limiting & JWT Auth',
+      'Swagger / OpenAPI Automated Specs',
     ],
-    tags: ['Enterprise Architecture', 'Security Audit', 'Redis', 'PostgreSQL', 'Microservices'],
+    tags: ['Django REST', 'FastAPI', 'GraphQL', 'Celery', 'Redis', 'Swagger'],
+    ctaLabel: 'Book API Integration Service →',
+  },
+  {
+    id: '07',
+    serviceNumber: '07',
+    category: 'web',
+    type: 'Enterprise Software',
+    title: 'Enterprise Software Development',
+    targetAudience: 'Bespoke Business Management & Operational Automation',
+    icon: Building2,
+    image: '/images/custom-software.png',
+    metricsBadge: '🏢 Bespoke ERP Architecture',
+    desc: 'Building bespoke enterprise software applications tailored precisely to your company’s internal operational workflows, inventory systems, and multi-department analytics.',
+    subDesc: 'We replace outdated legacy spreadsheets and fragmented tools with unified cloud software suites that automate repetitive tasks, improve data security, and provide real-time executive dashboards.',
+    bullets: [
+      'Bespoke Enterprise Software Systems',
+      'Automated Workflow & Approval Engines',
+      'Multi-Tenant SaaS Platform Development',
+      'Legacy Software Refactoring & Migration',
+      'Real-Time Executive Dashboards & Analytics',
+      'Role-Based Granular Permission Matrices',
+    ],
+    tags: ['Python', 'Django', 'React', 'PostgreSQL', 'Docker', 'REST APIs'],
+    ctaLabel: 'Book Custom Software Service →',
+  },
+  {
+    id: '08',
+    serviceNumber: '08',
+    category: 'cloud',
+    type: 'Cloud & DevOps',
+    title: 'Deployment & Cloud Services',
+    targetAudience: 'Automated CI/CD Pipelines, Kubernetes & High-Availability Cloud',
+    icon: Server,
+    image: '/images/devops-services.png',
+    metricsBadge: '☁️ Cloud Kubernetes Scale',
+    desc: 'Deploying and managing scalable cloud infrastructure on AWS, Google Cloud, and DigitalOcean with automated CI/CD deployment pipelines, containerization, and monitoring.',
+    subDesc: 'We implement Infrastructure as Code (Terraform), Docker containerization, Kubernetes cluster orchestration, and 24/7 server health telemetry to guarantee zero-downtime releases.',
+    bullets: [
+      'AWS & GCP Cloud Architecture Setup',
+      'Docker Containerization & Kubernetes (K8s)',
+      'Automated CI/CD Pipelines (GitHub Actions)',
+      'Infrastructure as Code (Terraform, Ansible)',
+      'Database Backup, Disaster Recovery & Clustering',
+      'Server Performance Telemetry & Security Hardening',
+    ],
+    tags: ['AWS', 'Docker', 'Kubernetes', 'Terraform', 'GitHub Actions', 'Nginx'],
+    ctaLabel: 'Book Cloud & Deployment Service →',
   },
 ];
 
 export default function ServicesPage() {
+  const [activeCategory, setActiveCategory] = useState('all');
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
-  const [selectedProjectType, setSelectedProjectType] = useState('Website');
+  const [selectedProjectType, setSelectedProjectType] = useState('Custom Website Development');
 
   const handleOpenQuote = (type: string) => {
     setSelectedProjectType(type);
     setIsQuoteModalOpen(true);
   };
 
+  const filteredServices =
+    activeCategory === 'all'
+      ? servicesList
+      : servicesList.filter((s) => s.category === activeCategory);
+
   return (
-    <div className="relative min-h-screen bg-[#FDFBF7] text-[#4A4A4A] py-12 sm:py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      {/* Interactive Grid Background */}
-      <InteractiveGridBoxes gridSize={55} highlightRadius={240} className="opacity-80" />
-
-      {/* Ambient Lighting Orbs */}
-      <div className="absolute top-20 left-1/4 h-80 w-80 rounded-full bg-[#C85236]/10 blur-3xl pointer-events-none" />
-      <div className="absolute top-1/3 right-10 h-72 w-72 rounded-full bg-[#FF7A00]/10 blur-3xl pointer-events-none" />
-
-      <div className="mx-auto max-w-6xl space-y-12 relative z-10">
-        {/* Header (Clean, without top badge) */}
+    <div className="relative min-h-screen text-[#334155] py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl space-y-10 sm:space-y-14 relative z-10">
+        {/* ========================================================================= */}
+        {/* HERO / HEADER SECTION */}
+        {/* ========================================================================= */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-slate-100/80 border border-slate-200 text-xs font-black uppercase tracking-wider text-slate-700 shadow-2xs">
+            <Sparkles className="h-3.5 w-3.5 text-[#0D9488]" />
+            <span>Full-Cycle Engineering Capabilities</span>
+          </div>
+
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="text-3xl sm:text-5xl font-extrabold text-[#1A1A1A] tracking-tight leading-tight"
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+            className="text-3xl sm:text-5xl md:text-6xl font-extrabold text-[#0F172A] tracking-tight leading-tight"
           >
-            Engineering <span className="text-[#FF7A00] drop-shadow-[0_4px_20px_rgba(255,122,0,0.35)]">Excellence</span> &{' '}
-            <span className="text-[#FF7A00] drop-shadow-[0_4px_20px_rgba(255,122,0,0.35)]">AI Services</span>
+            Engineering <span className="text-[#0D9488]">Excellence</span> &{' '}
+            <span className="text-[#FF7A00]">AI Services</span>
           </motion.h1>
+
           <motion.p
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-            className="text-sm sm:text-base text-[#5A5A5A] max-w-xl mx-auto leading-relaxed font-normal"
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed font-normal"
           >
-            Explore our high-craft digital solutions, from custom Development and Web & Mobile Apps to DevOps pipelines and AI integrations.
+            From custom high-throughput web applications to deep neural AI agents and automated Kubernetes cloud pipelines, explore our 8 core engineering disciplines.
           </motion.p>
-        </div>
 
-        {/* Mid-Range Sized 3D Animated Services List */}
-        <div className="space-y-2">
-          {servicesList.map((service, idx) => (
-            <Service3DCard
-              key={service.id}
-              id={service.id}
-              index={idx}
-              type={service.type}
-              title={service.title}
-              icon={service.icon}
-              image={service.image}
-              desc={service.desc}
-              bullets={service.bullets}
-              tags={service.tags}
-              onOpenQuote={handleOpenQuote}
-            />
-          ))}
-        </div>
-
-        {/* Global Interactive Quote Estimator CTA Box */}
-        <div className="pt-6">
-          <Card3DTilt>
-            <div className="w-full rounded-3xl bg-[#141417] p-8 sm:p-12 shadow-2xl relative overflow-hidden border border-white/15 text-white transform-style-3d text-center space-y-6">
-              {/* Ambient Lighting */}
-              <div className="absolute -top-32 -right-32 h-80 w-80 rounded-full bg-[#FF7A00]/30 blur-3xl pointer-events-none" />
-              <div className="absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-[#C85236]/25 blur-3xl pointer-events-none" />
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-500/10 via-transparent to-transparent pointer-events-none" />
-
-              <div style={{ transform: 'translateZ(30px)' }}>
-                <h2
-                  className="text-2xl sm:text-4xl font-black tracking-tight leading-tight"
-                  style={{ color: '#FFFFFF' }}
+          {/* Interactive Category Filter Bar */}
+          <div className="pt-4 flex flex-wrap items-center justify-center gap-2">
+            {categoryFilters.map((cat) => {
+              const isActive = activeCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setActiveCategory(cat.id)}
+                  className={`px-4 py-2 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-200 cursor-pointer flex items-center space-x-2 border ${
+                    isActive
+                      ? 'bg-[#0F172A] text-white border-[#0F172A] shadow-md shadow-slate-900/15 scale-105'
+                      : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                  }`}
                 >
-                  <span style={{ color: '#FFFFFF' }}>Have a Specific </span>
-                  <span className="bg-gradient-to-r from-[#FF7A00] to-[#FFA033] bg-clip-text text-transparent drop-shadow-[0_4px_24px_rgba(255,122,0,0.5)]">
-                    Project Scope?
+                  <span>{cat.label}</span>
+                  <span
+                    className={`text-[10px] px-1.5 py-0.2 rounded-full font-extrabold ${
+                      isActive
+                        ? 'bg-[#0D9488] text-white'
+                        : 'bg-slate-100 text-slate-500'
+                    }`}
+                  >
+                    {cat.count}
                   </span>
-                </h2>
-              </div>
-
-              <div style={{ transform: 'translateZ(20px)' }}>
-                <p
-                  className="max-w-lg mx-auto text-xs sm:text-base leading-relaxed font-medium"
-                  style={{ color: '#E2E8F0' }}
-                >
-                  Use our interactive quote estimator form to select project category, timeline, budget range, and receive an instant estimation breakdown.
-                </p>
-              </div>
-
-              <div style={{ transform: 'translateZ(45px)' }} className="inline-block pt-1">
-                <motion.button
-                  whileHover={{ scale: 1.06 }}
-                  whileTap={{ scale: 0.96 }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-                  onClick={() => handleOpenQuote('Website')}
-                  className="inline-flex items-center space-x-2.5 px-8 py-3.5 rounded-full text-xs font-black uppercase tracking-widest text-white bg-gradient-to-r from-[#FF7A00] via-[#FF8800] to-[#FF9933] shadow-xl shadow-[#FF7A00]/45 hover:shadow-[#FF7A00]/70 transition-all duration-300 cursor-pointer"
-                >
-                  <Sparkles className="h-4 w-4" />
-                  <span className="tracking-widest">Open Interactive Quote Estimator</span>
-                  <ArrowRight className="h-4 w-4" />
-                </motion.button>
-              </div>
-            </div>
-          </Card3DTilt>
+                </button>
+              );
+            })}
+          </div>
         </div>
+
+        {/* ========================================================================= */}
+        {/* 8 CORE BESPOKE ARCHITECTURAL SERVICE MODULES */}
+        {/* ========================================================================= */}
+        <motion.div layout className="space-y-4 sm:space-y-6">
+          <AnimatePresence mode="popLayout">
+            {filteredServices.map((service, idx) => (
+              <motion.div
+                key={service.id}
+                layout
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.96 }}
+                transition={{ duration: 0.35 }}
+              >
+                <Service3DCard
+                  id={service.id}
+                  index={idx}
+                  serviceNumber={service.serviceNumber}
+                  isStar={service.isStar}
+                  type={service.type}
+                  category={service.category}
+                  title={service.title}
+                  targetAudience={service.targetAudience}
+                  icon={service.icon}
+                  image={service.image}
+                  desc={service.desc}
+                  subDesc={service.subDesc}
+                  bullets={service.bullets}
+                  tags={service.tags}
+                  ctaLabel={service.ctaLabel}
+                  processFlow={service.processFlow}
+                  metricsBadge={service.metricsBadge}
+                  onOpenQuote={handleOpenQuote}
+                />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       </div>
 
-      {/* Quote Estimator Modal */}
+      {/* ========================================================================= */}
+      {/* FULL-WIDTH BOTTOM CTA BANNER (Exact Match) */}
+      {/* ========================================================================= */}
+      <section className="relative w-full bg-[#0F172A] py-16 sm:py-20 md:py-24 overflow-hidden border-y border-slate-800 text-white z-10 mt-16 mb-16 md:mb-24">
+        {/* Overlapping Saffron Symmetrical/Abstract Circle shape on the right edge - Optimized for Mobile responsiveness */}
+        <div className="absolute right-[-25%] sm:right-[-15%] lg:right-[-10%] top-[-10%] sm:top-[-20%] lg:top-1/2 lg:-translate-y-1/2 w-[320px] h-[320px] sm:w-[480px] sm:h-[480px] lg:w-[600px] lg:h-[600px] bg-[#FF7A00] rounded-full opacity-[0.9] pointer-events-none z-0" />
+        
+        {/* Harmonious Ambient Glows */}
+        <div className="absolute -top-20 -left-20 h-64 w-64 rounded-full bg-[#0D9488]/15 blur-3xl pointer-events-none z-0" />
+        <div className="absolute inset-0 bg-radial from-slate-800/10 to-transparent pointer-events-none z-0" />
+
+        {/* Content Container aligned with site grid */}
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center text-left">
+            {/* Left Side: Serif Heading & Subtle curved vector line */}
+            <div className="lg:col-span-7 space-y-4 relative">
+              {/* Subtle curved line graphic */}
+              <div className="absolute left-[-20px] top-[-35px] w-48 h-48 opacity-15 pointer-events-none hidden sm:block">
+                <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.8" className="w-full h-full text-white">
+                  <path d="M10,90 C30,30 50,70 95,20" />
+                </svg>
+              </div>
+
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-medium tracking-tight text-white leading-[1.2] relative z-10">
+                Ready to Transform Your <span className="italic block mt-1 font-serif text-[#0D9488] sm:text-white">Business with AI?</span>
+              </h2>
+            </div>
+
+            {/* Right Side: Serif Description & Flat Clean White Button */}
+            <div className="lg:col-span-5 space-y-7 relative z-10 flex flex-col items-start">
+              <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-serif">
+                Let's Define Your Requirements And Architect A Tailored AI Solution That Intelligently Optimizes And Scales Your Operations.
+              </p>
+
+              <Link href="/contact" className="no-underline">
+                <motion.div
+                  whileHover={{ scale: 1.04, y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="px-8 py-3.5 bg-white text-[#0F172A] font-black uppercase tracking-widest text-[11px] rounded-lg hover:bg-slate-100 transition-all shadow-lg shadow-black/15 cursor-pointer"
+                >
+                  Get in touch
+                </motion.div>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <GetQuoteModal
         isOpen={isQuoteModalOpen}
         onClose={() => setIsQuoteModalOpen(false)}

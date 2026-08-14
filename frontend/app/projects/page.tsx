@@ -2,12 +2,17 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Tag } from 'lucide-react';
+import { ArrowRight, Tag, Sparkles } from 'lucide-react';
 import ProjectDetailModal, { ProjectData } from '@/components/modals/ProjectDetailModal';
-import InteractiveGridBoxes from '@/components/animations/InteractiveGridBoxes';
 import Card3DTilt from '@/components/animations/Card3DTilt';
 
-const projectsList: ProjectData[] = [
+type StyledProject = ProjectData & {
+  accentColor: string;
+  badgeStyle: string;
+  btnGradient: string;
+};
+
+const projectsList: StyledProject[] = [
   {
     id: 'sales-forecasting-system',
     title: 'Sales Forecasting System',
@@ -24,6 +29,9 @@ const projectsList: ProjectData[] = [
     ],
     techStack: ['Python', 'Django', 'PostgreSQL', 'Scikit-learn', 'Pandas', 'NumPy', 'Celery', 'Redis', 'REST APIs', 'HTML/CSS/JS'],
     client: 'Enterprise Analytics Division',
+    accentColor: '#FF7A00',
+    badgeStyle: 'bg-[#FF7A00]/10 text-[#FF7A00] border-[#FF7A00]/30',
+    btnGradient: 'bg-gradient-to-r from-[#FF7A00] to-[#E06C00] hover:from-[#E06C00] hover:to-[#C55F00] shadow-amber-500/20',
   },
   {
     id: 'ai-mock-interview-system',
@@ -41,6 +49,29 @@ const projectsList: ProjectData[] = [
     ],
     techStack: ['Python', 'Django', 'PostgreSQL', 'Speech-to-Text API', 'REST APIs', 'WebSockets', 'HTML/CSS/JS'],
     client: 'EdTech & AI Career Platform',
+    accentColor: '#2563EB',
+    badgeStyle: 'bg-[#2563EB]/10 text-[#2563EB] border-[#2563EB]/30',
+    btnGradient: 'bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[#1E40AF] shadow-blue-500/20',
+  },
+  {
+    id: 'smart-logistics-telemetry',
+    title: 'Smart Logistics Telemetry Engine',
+    category: 'IoT & Real-Time Tracking',
+    image: '/images/custom-software.png',
+    shortDesc: 'High-throughput enterprise IoT telemetry engine built with Django, Redis, and React Native for real-time fleet location tracking and automated route optimization.',
+    fullDesc: 'Engineered a high-availability fleet telemetry and logistics tracking engine using Python, Django, and WebSockets. Implemented real-time GPS coordinates stream processing with Redis PubSub and PostgreSQL PostGIS spatial queries. Built cross-platform driver and dispatcher applications with React Native.',
+    keyFeatures: [
+      'High-throughput real-time GPS telemetry stream processing using WebSockets & Redis',
+      'Geofencing alerts & PostGIS spatial database queries for automated arrival notifications',
+      'Interactive dispatcher dashboard with live map rendering & vehicle telemetry metrics',
+      'React Native driver app with offline-first position caching & background location sync',
+      'REST APIs & microservices routing for third-party ERP integration',
+    ],
+    techStack: ['Python', 'Django', 'PostgreSQL', 'PostGIS', 'Redis', 'WebSockets', 'React Native', 'Docker', 'AWS'],
+    client: 'Global Freight & Supply Chain Corp',
+    accentColor: '#0D9488',
+    badgeStyle: 'bg-[#0D9488]/10 text-[#0D9488] border-[#0D9488]/30',
+    btnGradient: 'bg-gradient-to-r from-[#0D9488] to-[#0F766E] hover:from-[#0F766E] hover:to-[#115E59] shadow-teal-500/20',
   },
 ];
 
@@ -48,84 +79,88 @@ export default function ProjectsPage() {
   const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
 
   return (
-    <div className="relative min-h-screen bg-[#FDFBF7] text-[#4A4A4A] py-14 sm:py-18 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      {/* Interactive Grid Background */}
-      <InteractiveGridBoxes gridSize={55} highlightRadius={240} className="opacity-80" />
-
-      {/* Ambient Saffron Lighting */}
-      <div className="absolute top-10 right-1/4 h-72 w-72 rounded-full bg-[#FF7A00]/15 blur-3xl pointer-events-none" />
-      <div className="absolute bottom-20 left-10 h-72 w-72 rounded-full bg-[#FF9933]/15 blur-3xl pointer-events-none" />
-
-      <div className="mx-auto max-w-5xl space-y-10 relative z-10">
-        {/* Header (Clean, without top badge) */}
-        <div className="text-center max-w-2xl mx-auto space-y-3">
+    <div className="relative min-h-screen text-[#334155] py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl space-y-10 relative z-10">
+        {/* Header - Indian Flag Color Accent Sequence */}
+        <div className="text-center max-w-3xl mx-auto space-y-3">
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="text-3xl sm:text-4xl font-extrabold text-[#1A1A1A] tracking-tight leading-tight"
+            transition={{ duration: 0.5 }}
+            className="text-3xl sm:text-5xl font-black text-[#0F172A] tracking-tight leading-tight"
           >
-            Featured <span className="text-[#FF7A00] drop-shadow-[0_4px_20px_rgba(255,122,0,0.35)]">Projects & Systems</span>
+            <span className="text-[#FF7A00]">Ideas, </span>
+            <span>Engineered </span>
+            <span className="text-[#0D9488]">Into Reality</span>
           </motion.h1>
+
           <motion.p
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-            className="text-xs sm:text-sm text-[#5A5A5A] leading-relaxed font-normal"
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="text-xs sm:text-sm text-[#334155] leading-relaxed max-w-2xl mx-auto font-normal"
           >
-            Explore our flagship Machine Learning & AI systems. Click "Show More Details" to view complete technical specifications.
+            From concepts to working digital products, explore what we build with software, AI, and modern technology.
           </motion.p>
         </div>
 
-        {/* Mid-Sized Clean Grid Cards (Only Image, Title, 1-2 Line Details, & Show More Button) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto">
-          {projectsList.map((project) => (
+        {/* 3 Showcase Project Cards (Short Size, Clean Front, Tricolor Accents) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {projectsList.map((project, idx) => (
             <Card3DTilt key={project.id}>
-              <div className="h-full rounded-3xl bg-white/95 backdrop-blur-xl border border-[#EFE7DC] shadow-md overflow-hidden flex flex-col justify-between glass-card-hover group p-5 sm:p-6 space-y-4 transform-style-3d">
-                <div className="space-y-3.5">
-                  {/* Matching 3D Image Banner */}
-                  <div className="relative h-44 sm:h-48 w-full overflow-hidden rounded-2xl bg-[#121215] shadow-sm">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.12 }}
+                className="h-full rounded-2xl bg-white p-5 shadow-lg border border-slate-200/90 flex flex-col justify-between space-y-4 glass-card-hover group transform-style-3d relative overflow-hidden"
+              >
+                <div className="space-y-3">
+                  {/* Short Compact Image Container */}
+                  <div className="w-full h-36 sm:h-40 rounded-xl overflow-hidden relative border border-slate-100 bg-[#0F172A]">
                     <img
                       src={project.image}
                       alt={project.title}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
+                    <div className="absolute top-2.5 left-2.5 bg-[#0F172A]/90 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-white/20 text-[9px] font-black uppercase text-white shadow-xs">
+                      {project.category}
+                    </div>
                   </div>
 
-                  {/* Title */}
-                  <h2 className="text-xl font-extrabold text-[#1A1A1A] group-hover:text-[#C85236] transition-colors tracking-tight">
+                  {/* Title & Short Description */}
+                  <h3 className="text-base font-extrabold text-[#0F172A] group-hover:text-[#FF7A00] transition-colors leading-snug line-clamp-1">
                     {project.title}
-                  </h2>
+                  </h3>
 
-                  {/* Short 1-2 Line Details */}
-                  <p className="text-xs sm:text-sm text-[#5A5A5A] leading-relaxed line-clamp-2">
+                  <p className="text-xs leading-relaxed text-[#334155] line-clamp-3 font-normal">
                     {project.shortDesc}
                   </p>
                 </div>
 
-                {/* Show More Button */}
-                <div className="pt-2">
-                  <motion.button
-                    whileHover={{ scale: 1.03, y: -2 }}
-                    whileTap={{ scale: 0.97 }}
+                {/* Modal Trigger Button (Tech stack is cleanly inside the case study modal) */}
+                <div className="pt-3 border-t border-slate-100">
+                  <button
                     onClick={() => setSelectedProject(project)}
-                    className="btn-saffron w-full py-3 rounded-xl text-xs font-extrabold uppercase tracking-wider flex items-center justify-center space-x-2 shadow-md cursor-pointer"
+                    className={`w-full py-2.5 rounded-xl text-[11px] font-black uppercase tracking-wider flex items-center justify-center space-x-2 text-white shadow-md cursor-pointer transition-all ${project.btnGradient}`}
                   >
-                    <span>Show More Details</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </motion.button>
+                    <span>View Case Study</span>
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
                 </div>
-              </div>
+              </motion.div>
             </Card3DTilt>
           ))}
         </div>
       </div>
 
-      {/* Detailed Technical Case Study Modal (Shows All Features, Tech Stack, & Full Architecture Details) */}
-      <ProjectDetailModal
-        project={selectedProject}
-        onClose={() => setSelectedProject(null)}
-      />
+      {/* Project Details Modal (Displays complete Tech Stack & Key Deliverables inside) */}
+      {selectedProject && (
+        <ProjectDetailModal
+          onClose={() => setSelectedProject(null)}
+          project={selectedProject}
+        />
+      )}
     </div>
   );
 }

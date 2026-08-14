@@ -1,145 +1,195 @@
 @import "tailwindcss";
 
 :root {
-  /* Core Color System */
-  --bg-cream: #FDFBF7;
+  /* Core Background & Typography Colors */
+  --bg-slate-white: #F8FAFC;
   --bg-card: #FFFFFF;
-  --bg-subtle: #F6F2EB;
+  --bg-subtle: #F1F5F9;
   
-  --text-heading: #1A1A1A;
-  --text-body: #4A4A4A;
-  --text-muted: #71717A;
+  --text-navy: #0F172A;   /* Primary Navy Headings */
+  --text-body: #334155;   /* Slate Body Text */
+  --text-muted: #64748B;  /* Muted Slate Text */
 
-  /* Saffron / Bhagva Accents */
-  --saffron-start: #FF7A00;
-  --saffron-end: #FF9933;
-  --saffron-gradient: linear-gradient(135deg, #FF7A00 0%, #FF9933 100%);
-  --saffron-glow: rgba(255, 122, 0, 0.25);
-  --saffron-border: rgba(255, 122, 0, 0.3);
+  /* 3 Distinct Brand Colors */
+  --color-teal: #0D9488;    /* 🟢 Teal / Green */
+  --color-saffron: #FF7A00; /* 🟠 Saffron / Orange */
+  --color-navy: #0F172A;    /* 🔵 Navy Blue */
 
-  /* Secondary Accents */
-  --muted-gold: #D97706;
-  --terracotta: #C2410C;
-  --border-light: #EFE7DC;
+  --border-light: #E2E8F0;
 
-  /* Global Layout */
-  --background: var(--bg-cream);
+  --background: var(--bg-slate-white);
   --foreground: var(--text-body);
 }
 
 @theme inline {
-  --color-background: var(--bg-cream);
+  --color-background: var(--bg-slate-white);
   --color-foreground: var(--text-body);
-  --color-heading: var(--text-heading);
-  --color-saffron-start: #FF7A00;
-  --color-saffron-end: #FF9933;
-  --color-muted-gold: #D97706;
-  --color-terracotta: #C2410C;
+  --color-heading: var(--text-navy);
+  --color-brand-teal: #0D9488;
+  --color-brand-saffron: #FF7A00;
+  --color-brand-navy: #0F172A;
 }
 
 body {
-  background-color: var(--bg-cream);
+  background-color: var(--bg-slate-white);
   color: var(--text-body);
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   overflow-x: hidden;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  color: var(--text-heading);
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-navy);
+  }
 }
 
-/* Premium Scrollbar */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #FDFBF7;
+  background: #F8FAFC;
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #FF7A00 0%, #FF9933 100%);
+  background: #0D9488;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #FF7A00;
 }
 
-/* 3D Perspective Container */
-.perspective-1000 {
-  perspective: 1000px;
+/* Solid Color Text Utilities */
+.text-teal {
+  color: #0D9488;
 }
 
-.transform-style-3d {
-  transform-style: preserve-3d;
+.text-saffron {
+  color: #FF7A00;
 }
 
-/* Saffron Text Gradient */
-.text-saffron-gradient {
-  background: linear-gradient(135deg, #FF7A00 0%, #FF9933 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.text-navy {
+  color: #0F172A;
 }
 
 /* Glassmorphism Styles */
 .glass-header-scrolled {
-  background: rgba(253, 251, 247, 0.85);
-  backdrop-filter: blur(16px);
+  background: rgba(248, 250, 252, 0.94);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(239, 231, 220, 0.8);
-  box-shadow: 0 4px 20px -5px rgba(26, 26, 26, 0.05);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 4px 20px -5px rgba(15, 23, 42, 0.05);
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.95);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid #EFE7DC;
-  box-shadow: 0 10px 30px -10px rgba(26, 26, 26, 0.04);
+  backdrop-filter: blur(12px);
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.04);
 }
 
 .glass-card-hover {
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .glass-card-hover:hover {
-  border-color: rgba(255, 122, 0, 0.4);
-  box-shadow: 0 20px 40px -12px rgba(255, 122, 0, 0.15);
-  transform: translateY(-4px) rotateX(2deg) rotateY(-2deg);
+  border-color: rgba(13, 148, 136, 0.4);
+  box-shadow: 0 20px 40px -12px rgba(13, 148, 136, 0.12);
+  transform: translateY(-3px);
 }
 
-/* Button Styling with Saffron Glow */
-.btn-saffron {
-  background: linear-gradient(135deg, #FF7A00 0%, #FF9933 100%);
-  color: #FFFFFF;
-  font-weight: 700;
+/* ULTRA-PREMIUM PROFESSIONAL BUTTONS (Zero Glitch, Perfect Color Contrast) */
+.btn-saffron-pro {
   position: relative;
-  overflow: hidden;
+  background: linear-gradient(135deg, #FF7A00 0%, #E06C00 100%);
+  color: #FFFFFF;
+  font-weight: 900;
+  border-radius: 0.875rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 10px 25px -5px rgba(255, 122, 0, 0.35);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 15px rgba(255, 122, 0, 0.25);
 }
-
-.btn-saffron::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
-  transition: all 0.6s ease;
-}
-
-.btn-saffron:hover::before {
-  left: 100%;
-}
-
-.btn-saffron:hover {
-  box-shadow: 0 8px 25px rgba(255, 122, 0, 0.4);
+.btn-saffron-pro:hover {
+  background: linear-gradient(135deg, #E06C00 0%, #C55F00 100%);
+  box-shadow: 0 14px 32px -5px rgba(255, 122, 0, 0.45);
   transform: translateY(-2px);
 }
 
-/* Continuous Infinite Scroll Marquee */
+.btn-navy-pro {
+  position: relative;
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+  color: #FFFFFF;
+  font-weight: 900;
+  border-radius: 0.875rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-navy-pro::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3.5px;
+  background: linear-gradient(
+    90deg,
+    #FF7A00 0%,
+    #FF7A00 33.33%,
+    #FFFFFF 33.33%,
+    #FFFFFF 66.66%,
+    #0D9488 66.66%,
+    #0D9488 100%
+  );
+}
+.btn-navy-pro:hover {
+  background: linear-gradient(135deg, #1E293B 0%, #334155 100%);
+  box-shadow: 0 14px 30px -5px rgba(255, 122, 0, 0.25);
+  transform: translateY(-2px);
+}
+
+/* Separate Solid Buttons */
+.btn-teal {
+  background-color: #0D9488;
+  color: #FFFFFF;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(13, 148, 136, 0.25);
+  transition: all 0.25s ease;
+}
+.btn-teal:hover {
+  background-color: #0F766E;
+  box-shadow: 0 8px 20px rgba(13, 148, 136, 0.38);
+  transform: translateY(-2px);
+}
+
+.btn-saffron {
+  background-color: #FF7A00;
+  color: #FFFFFF;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(255, 122, 0, 0.25);
+  transition: all 0.25s ease;
+}
+.btn-saffron:hover {
+  background-color: #E06C00;
+  box-shadow: 0 8px 20px rgba(255, 122, 0, 0.38);
+  transform: translateY(-2px);
+}
+
+.btn-navy {
+  background-color: #0F172A;
+  color: #FFFFFF;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);
+  transition: all 0.25s ease;
+}
+.btn-navy:hover {
+  background-color: #1E293B;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.4);
+  transform: translateY(-2px);
+}
+
 @keyframes marquee-scroll {
   0% { transform: translateX(0%); }
   100% { transform: translateX(-50%); }
@@ -155,12 +205,11 @@ h1, h2, h3, h4, h5, h6 {
   animation-play-state: paused;
 }
 
-/* Connecting Line Animation for Process Flow */
 @keyframes pulse-glow {
   0%, 100% { opacity: 0.4; }
-  50% { opacity: 1; }
+  50% { opacity: 0.8; }
 }
 
 .animate-pulse-glow {
-  animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: pulse-glow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }

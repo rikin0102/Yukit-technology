@@ -1,199 +1,556 @@
 'use client';
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Award, Users, Cpu, ShieldCheck, Zap, Layers, Sparkles } from 'lucide-react';
+import React, { useRef, useState, useEffect } from 'react';
+import Link from 'next/link';
+import { motion, useInView } from 'framer-motion';
+import {
+  Sparkles,
+  CheckCircle2,
+  ArrowRight,
+  Search,
+  Compass,
+  Code2,
+  RefreshCw,
+  Cpu,
+  BrainCircuit,
+  Target,
+  TrendingUp,
+  Users,
+} from 'lucide-react';
+import Card3DTilt from '@/components/animations/Card3DTilt';
 
-const techStack = [
-  { name: 'Next.js 16', cat: 'Frontend', icon: '⚡' },
-  { name: 'React 19', cat: 'UI Library', icon: '⚛️' },
-  { name: 'TypeScript', cat: 'Language', icon: '🔷' },
-  { name: 'Python AI', cat: 'Machine Learning', icon: '🐍' },
-  { name: 'PyTorch / LLMs', cat: 'AI Engines', icon: '🔥' },
-  { name: 'Node.js', cat: 'Backend', icon: '🟢' },
-  { name: 'PostgreSQL', cat: 'Database', icon: '🐘' },
-  { name: 'Docker / K8s', cat: 'DevOps', icon: '🐳' },
-  { name: 'AWS Cloud', cat: 'Infrastructure', icon: '☁️' },
-  { name: 'TailwindCSS v4', cat: 'Styling', icon: '🎨' },
-  { name: 'Three.js / R3F', cat: '3D Graphics', icon: '📐' },
-  { name: 'Framer Motion', cat: 'Animations', icon: '✨' },
+// Core Metric Count-Up Component (Mid-Sized Cards)
+function AnimatedMetric({
+  value,
+  label,
+  subtitle,
+  desc,
+  accentColor,
+  accentBg,
+}: {
+  value: string;
+  label: string;
+  subtitle: string;
+  desc: string;
+  accentColor: string;
+  accentBg: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: '-40px' });
+  const [displayValue, setDisplayValue] = useState(value === '24/7' ? '0/0' : '0');
+
+  useEffect(() => {
+    if (!isInView) return;
+
+    if (value === '5+') {
+      let current = 0;
+      const timer = setInterval(() => {
+        current += 1;
+        if (current >= 5) {
+          setDisplayValue('5+');
+          clearInterval(timer);
+        } else {
+          setDisplayValue(`${current}+`);
+        }
+      }, 150);
+      return () => clearInterval(timer);
+    } else if (value === '8+') {
+      let current = 0;
+      const timer = setInterval(() => {
+        current += 1;
+        if (current >= 8) {
+          setDisplayValue('8+');
+          clearInterval(timer);
+        } else {
+          setDisplayValue(`${current}+`);
+        }
+      }, 100);
+      return () => clearInterval(timer);
+    } else if (value === '24/7') {
+      setDisplayValue('24/7');
+    }
+  }, [isInView, value]);
+
+  return (
+    <Card3DTilt>
+      <motion.div
+        ref={ref}
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+        className="h-full rounded-2xl bg-white p-6 sm:p-7 shadow-lg border border-slate-200/90 flex flex-col justify-between space-y-4 glass-card-hover group relative overflow-hidden transform-style-3d"
+      >
+        {/* Subtle Ambient Glow */}
+        <div className={`absolute -top-12 -right-12 h-32 w-32 rounded-full ${accentBg} opacity-15 blur-2xl pointer-events-none group-hover:scale-150 transition-transform duration-700`} />
+
+        <div>
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 bg-slate-100/80 px-2.5 py-0.5 rounded-md border border-slate-200">
+              {label}
+            </span>
+            <div className={`h-2 w-2 rounded-full ${accentBg}`} />
+          </div>
+
+          <div className="flex items-baseline space-x-1 mb-2">
+            <span className={`text-4xl sm:text-5xl font-black tracking-tight ${accentColor}`}>
+              {displayValue}
+            </span>
+          </div>
+
+          <h3 className="text-xs font-black uppercase tracking-wider text-[#0F172A] mb-2">
+            {subtitle}
+          </h3>
+
+          <p className="text-xs text-[#334155] leading-relaxed font-normal">
+            {desc}
+          </p>
+        </div>
+
+        <div className={`pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold ${accentColor}`}>
+          <span>Verified Standard</span>
+          <CheckCircle2 className="h-3.5 w-3.5" />
+        </div>
+      </motion.div>
+    </Card3DTilt>
+  );
+}
+
+// 4 How We Think Cards Data
+const thinkingCards = [
+  {
+    num: '01',
+    title: 'Understand First',
+    desc: 'We start by understanding the problem, users, and business objective before writing code.',
+    icon: Search,
+    accentColor: 'text-[#FF7A00]',
+    badgeBg: 'bg-[#FF7A00]/10 text-[#FF7A00] border-[#FF7A00]/25',
+    pillBg: 'bg-[#FF7A00]',
+  },
+  {
+    num: '02',
+    title: 'Design With Purpose',
+    desc: 'Every interface and interaction should make the product easier to understand and use.',
+    icon: Compass,
+    accentColor: 'text-[#0F172A]',
+    badgeBg: 'bg-[#0F172A]/10 text-[#0F172A] border-[#0F172A]/25',
+    pillBg: 'bg-[#0F172A]',
+  },
+  {
+    num: '03',
+    title: 'Engineer For Scale',
+    desc: 'We build clean, maintainable systems that can evolve as your business grows.',
+    icon: Code2,
+    accentColor: 'text-[#2563EB]',
+    badgeBg: 'bg-[#2563EB]/10 text-[#2563EB] border-[#2563EB]/25',
+    pillBg: 'bg-[#2563EB]',
+  },
+  {
+    num: '04',
+    title: 'Improve Continuously',
+    desc: 'We test, measure, learn, and improve instead of treating development as a one-time process.',
+    icon: RefreshCw,
+    accentColor: 'text-[#0D9488]',
+    badgeBg: 'bg-[#0D9488]/10 text-[#0D9488] border-[#0D9488]/25',
+    pillBg: 'bg-[#0D9488]',
+  },
+];
+
+// Why Yukti? 4 Points Updated Data
+const whyYuktiPoints = [
+  {
+    num: '01',
+    title: 'Your Idea, Our Engineering',
+    desc: 'We turn your ideas into practical digital products through thoughtful design and reliable engineering.',
+    icon: Code2,
+    accentColor: 'text-[#FF7A00]',
+    badgeBg: 'bg-[#FF7A00]/10 text-[#FF7A00] border-[#FF7A00]/25',
+    iconBg: 'bg-[#FF7A00]',
+  },
+  {
+    num: '02',
+    title: 'AI Where It Makes Sense',
+    desc: 'We use AI to solve meaningful problems and improve products—not simply to follow a trend.',
+    icon: BrainCircuit,
+    accentColor: 'text-[#2563EB]',
+    badgeBg: 'bg-[#2563EB]/10 text-[#2563EB] border-[#2563EB]/25',
+    iconBg: 'bg-[#2563EB]',
+  },
+  {
+    num: '03',
+    title: 'Direct & Transparent',
+    desc: 'Work directly with the developer building your product, with clear communication from idea to deployment.',
+    icon: Users,
+    accentColor: 'text-[#0F172A]',
+    badgeBg: 'bg-[#0F172A]/10 text-[#0F172A] border-[#0F172A]/25',
+    iconBg: 'bg-[#0F172A]',
+  },
+  {
+    num: '04',
+    title: 'Built for the Long Term',
+    desc: 'Clean architecture, maintainable code, and scalable foundations help your product evolve as your business grows.',
+    icon: TrendingUp,
+    accentColor: 'text-[#0D9488]',
+    badgeBg: 'bg-[#0D9488]/10 text-[#0D9488] border-[#0D9488]/25',
+    iconBg: 'bg-[#0D9488]',
+  },
+];
+
+// Single-line 3D Technology Showcase Items
+const techShowcaseItems = [
+  // FRONTEND
+  { name: 'Next.js', category: 'FRONTEND', icon: '⚡', border: 'hover:border-slate-800', badgeBg: 'bg-slate-900/10 text-slate-900' },
+  { name: 'React', category: 'FRONTEND', icon: '⚛️', border: 'hover:border-cyan-500', badgeBg: 'bg-cyan-500/10 text-cyan-600' },
+  { name: 'TypeScript', category: 'FRONTEND', icon: '🔷', border: 'hover:border-blue-600', badgeBg: 'bg-blue-600/10 text-blue-600' },
+  { name: 'Tailwind CSS', category: 'FRONTEND', icon: '🎨', border: 'hover:border-teal-500', badgeBg: 'bg-teal-500/10 text-teal-600' },
+
+  // BACKEND
+  { name: 'Python', category: 'BACKEND', icon: '🐍', border: 'hover:border-amber-500', badgeBg: 'bg-amber-500/10 text-amber-600' },
+  { name: 'Django', category: 'BACKEND', icon: '🎯', border: 'hover:border-emerald-600', badgeBg: 'bg-emerald-600/10 text-emerald-600' },
+  { name: 'FastAPI', category: 'BACKEND', icon: '🚀', border: 'hover:border-sky-500', badgeBg: 'bg-sky-500/10 text-sky-600' },
+  { name: 'REST APIs', category: 'BACKEND', icon: '🔗', border: 'hover:border-indigo-600', badgeBg: 'bg-indigo-600/10 text-indigo-600' },
+
+  // AI & MACHINE LEARNING
+  { name: 'OpenAI', category: 'AI & ML', icon: '🤖', border: 'hover:border-emerald-500', badgeBg: 'bg-emerald-500/10 text-emerald-600' },
+  { name: 'LangChain', category: 'AI & ML', icon: '🦜', border: 'hover:border-orange-500', badgeBg: 'bg-orange-500/10 text-orange-600' },
+  { name: 'Hugging Face', category: 'AI & ML', icon: '🤗', border: 'hover:border-yellow-500', badgeBg: 'bg-yellow-500/10 text-yellow-600' },
+  { name: 'RAG', category: 'AI & ML', icon: '🧠', border: 'hover:border-purple-600', badgeBg: 'bg-purple-600/10 text-purple-600' },
+  { name: 'Machine Learning', category: 'AI & ML', icon: '📊', border: 'hover:border-blue-500', badgeBg: 'bg-blue-500/10 text-blue-600' },
+
+  // DATABASE
+  { name: 'PostgreSQL', category: 'DATABASE', icon: '🐘', border: 'hover:border-blue-700', badgeBg: 'bg-blue-700/10 text-blue-700' },
+  { name: 'MySQL', category: 'DATABASE', icon: '🐬', border: 'hover:border-sky-600', badgeBg: 'bg-sky-600/10 text-sky-600' },
+  { name: 'Redis', category: 'DATABASE', icon: '🔴', border: 'hover:border-red-600', badgeBg: 'bg-red-600/10 text-red-600' },
+
+  // DEVOPS & CLOUD
+  { name: 'Docker', category: 'DEVOPS & CLOUD', icon: '🐳', border: 'hover:border-sky-500', badgeBg: 'bg-sky-500/10 text-sky-600' },
+  { name: 'Nginx', category: 'DEVOPS & CLOUD', icon: '🟢', border: 'hover:border-green-600', badgeBg: 'bg-green-600/10 text-green-600' },
+  { name: 'Linux', category: 'DEVOPS & CLOUD', icon: '🐧', border: 'hover:border-slate-800', badgeBg: 'bg-slate-800/10 text-slate-800' },
+  { name: 'AWS', category: 'DEVOPS & CLOUD', icon: '☁️', border: 'hover:border-amber-500', badgeBg: 'bg-amber-500/10 text-amber-600' },
+  { name: 'GitHub Actions', category: 'DEVOPS & CLOUD', icon: '⚡', border: 'hover:border-indigo-500', badgeBg: 'bg-indigo-500/10 text-indigo-600' },
 ];
 
 export default function AboutPage() {
   return (
-    <div className="relative min-h-screen bg-[#FDFBF7] text-[#4A4A4A] py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
-      {/* Background Glow */}
-      <div className="absolute top-20 right-10 h-72 w-72 rounded-full bg-[#FF7A00]/5 blur-3xl pointer-events-none" />
+    <div className="relative min-h-screen text-[#334155] py-16 sm:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-24 relative z-10">
 
-      <div className="mx-auto max-w-7xl space-y-20 relative z-10">
-        {/* Page Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4">
-          <motion.span
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-xs font-black uppercase tracking-widest text-[#FF7A00]"
+        {/* ------------------- 1. HERO / WHO WE ARE SECTION ------------------- */}
+        <section className="text-center max-w-4xl mx-auto space-y-6 pt-4 relative">
+          {/* Ambient Glow behind Heading */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-64 w-96 bg-gradient-to-r from-[#FF7A00]/15 via-[#0D9488]/10 to-transparent blur-3xl pointer-events-none -z-10" />
+
+          {/* Eyebrow - Enhanced Comfort & Attractiveness */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: -10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center space-x-2.5 px-5 py-2 rounded-full text-xs font-black uppercase tracking-widest text-[#FF7A00] bg-gradient-to-r from-[#FF7A00]/15 via-[#FF7A00]/8 to-[#FF7A00]/15 border border-[#FF7A00]/30 shadow-lg shadow-[#FF7A00]/10 backdrop-blur-md"
           >
-            Who We Are
-          </motion.span>
+            <Sparkles className="h-4 w-4 text-[#FF7A00] animate-pulse" />
+            <span>WHO WE ARE</span>
+          </motion.div>
+
+          {/* Main Heading */}
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-4xl sm:text-5xl font-extrabold text-[#1A1A1A] tracking-tight"
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#0F172A] tracking-tight leading-[1.12]"
           >
-            Engineering <span className="text-saffron-gradient">Digital Intelligence</span>
+            <span>Engineering Ideas Into </span>
+            <span className="bg-gradient-to-r from-[#FF7A00] via-[#FFA04D] to-[#FF7A00] bg-clip-text text-transparent inline-block">
+              Digital Intelligence
+            </span>
           </motion.h1>
+
+          {/* Introduction Paragraph */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-base text-[#4A4A4A] leading-relaxed"
+            transition={{ duration: 0.7, delay: 0.25 }}
+            className="mx-auto max-w-3xl text-base sm:text-lg lg:text-xl font-normal leading-relaxed text-[#334155] pt-1"
           >
-            Yukti Technology is a premium software, AI, and startup solutions provider committed to delivering world-class engineering and exceptional digital experiences.
+            Yukti Technologies is a software and AI engineering company building modern digital products for businesses, startups, and ambitious ideas. We combine thoughtful design, reliable engineering, and practical AI to transform complex problems into simple, scalable digital solutions.
           </motion.p>
-        </div>
+        </section>
 
-        {/* About Us Story Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="space-y-6"
-          >
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1A1A1A]">
-              Our Story & Core Conviction
-            </h2>
 
-            <p className="text-sm leading-relaxed text-[#4A4A4A]">
-              Founded with the vision to bridge complex enterprise software engineering with seamless user interface design, <strong className="text-[#1A1A1A]">Yukti Technology</strong> has evolved into a trusted innovation partner for global enterprises and ambitious startups alike. "Yukti" signifies tactical innovation and intelligent problem solving—the core philosophy embedded in every line of code we craft.
-            </p>
+        {/* ------------------- 2. STORY SECTION ------------------- */}
+        <section className="relative">
+          <Card3DTilt>
+            <div className="w-full rounded-3xl bg-white p-8 sm:p-14 shadow-2xl border border-slate-200/90 relative overflow-hidden glass-card transform-style-3d">
+              {/* Subtle Decorative Ambient Orb */}
+              <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-gradient-to-br from-[#FF7A00]/10 via-[#0D9488]/10 to-transparent blur-3xl pointer-events-none" />
 
-            <p className="text-sm leading-relaxed text-[#4A4A4A]">
-              We believe that modern software must be fast, resilient, and beautifully designed. Whether building custom AI workflows, high-throughput cloud infrastructure, or intuitive web and mobile applications, our multi-disciplinary engineering teams focus on shipping products that drive real revenue and user delight.
-            </p>
-
-            <p className="text-sm leading-relaxed text-[#4A4A4A]">
-              With headquarters operating at the intersection of technological advancement and human-centered design, we continue to push the boundaries of Web3, Generative AI, and ultra-responsive micro-frontend design.
-            </p>
-
-            <div className="grid grid-cols-3 gap-4 pt-4 border-t border-[#EFE7DC]">
-              <div>
-                <h4 className="text-2xl font-black text-[#FF7A00]">99.8%</h4>
-                <p className="text-xs text-[#71717A] font-semibold">On-Time Sprint Delivery</p>
-              </div>
-              <div>
-                <h4 className="text-2xl font-black text-[#FF7A00]">50+</h4>
-                <p className="text-xs text-[#71717A] font-semibold">Shipped Products</p>
-              </div>
-              <div>
-                <h4 className="text-2xl font-black text-[#FF7A00]">100%</h4>
-                <p className="text-xs text-[#71717A] font-semibold">Client Satisfaction</p>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="relative perspective-1000"
-          >
-            <div className="rounded-3xl bg-white p-8 shadow-xl border border-[#EFE7DC] space-y-6 glass-card-hover transform-style-3d">
-              <div className="flex items-center space-x-4">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-[#FF7A00] to-[#FF9933] text-white shadow-md shadow-[#FF7A00]/25">
-                  <Sparkles className="h-7 w-7" />
+              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                {/* Heading Left */}
+                <div className="lg:col-span-5 space-y-4">
+                  <span className="text-xs font-black uppercase tracking-widest text-[#0D9488]">
+                    Our Origin & Focus
+                  </span>
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0F172A] leading-tight">
+                    Built With Purpose.<br />
+                    <span className="text-[#FF7A00]">Driven By Innovation.</span>
+                  </h2>
+                  <div className="h-1 w-20 rounded-full bg-gradient-to-r from-[#FF7A00] to-[#0D9488]" />
                 </div>
-                <div>
-                  <h3 className="text-lg font-extrabold text-[#1A1A1A]">Startup & Enterprise Acceleration</h3>
-                  <p className="text-xs text-[#71717A]">From zero to production launch</p>
+
+                {/* Paragraphs Right */}
+                <div className="lg:col-span-7 space-y-6 text-sm sm:text-base leading-relaxed text-[#334155] font-normal">
+                  <p>
+                    Yukti Technologies was created with a simple belief: technology should solve real problems, not create unnecessary complexity. We build websites, applications, custom software, and AI-powered solutions that help businesses turn ideas into working digital products.
+                  </p>
+                  <p>
+                    Our approach combines engineering, design, and artificial intelligence. From a business website to a complete software platform or an AI-powered workflow, we focus on building solutions that are practical, scalable, secure, and designed around the people who use them.
+                  </p>
                 </div>
               </div>
-
-              <div className="space-y-3">
-                {[
-                  'Bespoke AI model fine-tuning & RAG architectures',
-                  'High-availability cloud microservices (Kubernetes/Serverless)',
-                  'Sub-second rendering Next.js & React web applications',
-                  'Cross-platform iOS and Android mobile engineering',
-                  'Rigorous security compliance and automated test coverage',
-                ].map((item, idx) => (
-                  <div key={idx} className="flex items-start space-x-3 text-xs text-[#4A4A4A]">
-                    <Zap className="h-4 w-4 text-[#FF7A00] shrink-0 mt-0.5" />
-                    <span>{item}</span>
-                  </div>
-                ))}
-              </div>
             </div>
-          </motion.div>
-        </div>
+          </Card3DTilt>
+        </section>
 
-        {/* Continuous Infinite Scroll Strip of Tech Stack with 3D Tilt */}
-        <div className="space-y-6 py-10">
-          <div className="text-center space-y-2">
-            <span className="text-xs font-black uppercase tracking-widest text-[#FF7A00]">
-              Stack & Tools
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1A1A1A]">
-              Technologies We Use
+
+        {/* ------------------- 3. CORE METRICS SECTION (MID-SIZED) ------------------- */}
+        <section className="max-w-5xl mx-auto space-y-6">
+          <div className="text-center space-y-1">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A]">
+              Core Scale Metrics
             </h2>
           </div>
 
-          <div className="relative overflow-hidden w-full py-4 border-y border-[#EFE7DC] bg-white/70">
-            <div className="animate-marquee-strip flex space-x-6">
-              {[...techStack, ...techStack].map((tech, idx) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <AnimatedMetric
+              value="5+"
+              label="METRIC 01"
+              subtitle="CORE TECHNOLOGIES"
+              desc="Modern technologies across AI, software engineering, web development, databases, and cloud infrastructure."
+              accentColor="text-[#FF7A00]"
+              accentBg="bg-[#FF7A00]"
+            />
+
+            <AnimatedMetric
+              value="8+"
+              label="METRIC 02"
+              subtitle="SOLUTION CATEGORIES"
+              desc="From websites and web applications to AI, mobile, automation, APIs, and custom software solutions."
+              accentColor="text-[#2563EB]"
+              accentBg="bg-[#2563EB]"
+            />
+
+            <AnimatedMetric
+              value="24/7"
+              label="METRIC 03"
+              subtitle="DIGITAL AVAILABILITY"
+              desc="Digital-first solutions designed to keep your business accessible, connected, and ready to scale."
+              accentColor="text-[#0D9488]"
+              accentBg="bg-[#0D9488]"
+            />
+          </div>
+        </section>
+
+
+        {/* ------------------- 4. HOW WE THINK SECTION (4 ANIMATED CARDS) ------------------- */}
+        <section className="space-y-10">
+          <div className="text-center space-y-2 max-w-3xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A]">
+              How We Think
+            </h2>
+            <p className="text-xs sm:text-sm text-[#64748B]">
+              Core principles guiding how we build software, design experiences, and solve complex technical challenges.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {thinkingCards.map((card, idx) => {
+              const Icon = card.icon;
+              return (
+                <Card3DTilt key={card.num}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: idx * 0.12 }}
+                    className="h-full rounded-2xl bg-white p-7 shadow-lg border border-slate-200/90 flex flex-col justify-between space-y-6 glass-card-hover group relative overflow-hidden transform-style-3d"
+                  >
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <span className={`text-3xl font-black ${card.accentColor}`}>
+                          {card.num}
+                        </span>
+                        <div className={`p-2 rounded-xl bg-slate-100 group-hover:scale-110 transition-transform ${card.accentColor}`}>
+                          <Icon className="h-5 w-5" />
+                        </div>
+                      </div>
+
+                      <h3 className="text-lg font-extrabold text-[#0F172A] group-hover:text-[#FF7A00] transition-colors">
+                        {card.title}
+                      </h3>
+
+                      <p className="text-xs sm:text-sm text-[#334155] leading-relaxed font-normal">
+                        {card.desc}
+                      </p>
+                    </div>
+
+                    <div className={`h-1 w-full rounded-full ${card.pillBg}`} />
+                  </motion.div>
+                </Card3DTilt>
+              );
+            })}
+          </div>
+        </section>
+
+
+        {/* ------------------- 5. TECHNOLOGY SHOWCASE ------------------- */}
+        <section className="space-y-8 pt-2">
+          <div className="text-center space-y-2 max-w-3xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A]">
+              Technology Behind Our Solutions
+            </h2>
+            <p className="text-xs sm:text-sm text-[#64748B]">
+              Continuous 3D right-to-left technology pipeline (Hover any badge to pause)
+            </p>
+          </div>
+
+          {/* Single-Line Right-to-Left 3D Moving Marquee */}
+          <div className="relative overflow-hidden w-full py-6">
+            {/* Fade Edges Overlay */}
+            <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#FDFBF7] to-transparent z-20 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#FDFBF7] to-transparent z-20 pointer-events-none" />
+
+            <motion.div
+              animate={{ x: ['0%', '-50%'] }}
+              transition={{
+                repeat: Infinity,
+                repeatType: 'loop',
+                duration: 34,
+                ease: 'linear',
+              }}
+              className="flex space-x-5 w-max hover:[animation-play-state:paused] perspective-1000"
+            >
+              {[...techShowcaseItems, ...techShowcaseItems].map((item, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center space-x-3 rounded-xl bg-white px-5 py-3 border border-[#EFE7DC] shadow-sm transition-all hover:border-[#FF7A00] hover:shadow-md hover:-translate-y-1 transform-style-3d cursor-pointer shrink-0"
+                  className={`flex items-center space-x-3.5 px-6 py-4 rounded-2xl bg-white border border-slate-200/90 shadow-md ${item.border} hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 group cursor-pointer transform-style-3d`}
                 >
-                  <span className="text-xl">{tech.icon}</span>
+                  <span className="text-2xl group-hover:scale-125 transition-transform duration-300">
+                    {item.icon}
+                  </span>
                   <div>
-                    <h4 className="text-xs font-extrabold text-[#1A1A1A]">{tech.name}</h4>
-                    <span className="text-[10px] text-[#71717A] font-semibold">{tech.cat}</span>
+                    <h4 className="text-sm font-extrabold text-[#0F172A] group-hover:text-[#FF7A00] transition-colors">
+                      {item.name}
+                    </h4>
+                    <span className={`text-[9px] font-black tracking-widest px-2 py-0.5 rounded-md ${item.badgeBg}`}>
+                      {item.category}
+                    </span>
                   </div>
                 </div>
               ))}
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </section>
 
-        {/* Culture & Experience Blurb */}
-        <div className="rounded-3xl bg-white p-8 sm:p-12 shadow-lg border border-[#EFE7DC]">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="space-y-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FF7A00]/10 text-[#FF7A00]">
-                <Users className="h-5 w-5" />
-              </div>
-              <h3 className="text-lg font-extrabold text-[#1A1A1A]">Culture of Excellence</h3>
-              <p className="text-xs leading-relaxed text-[#4A4A4A]">
-                Our engineers are passionate problem solvers who foster transparent communication, continuous peer reviews, and extreme pride in software craft.
-              </p>
-            </div>
 
-            <div className="space-y-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FF7A00]/10 text-[#FF7A00]">
-                <ShieldCheck className="h-5 w-5" />
-              </div>
-              <h3 className="text-lg font-extrabold text-[#1A1A1A]">Uncompromising Security</h3>
-              <p className="text-xs leading-relaxed text-[#4A4A4A]">
-                Data protection, encryption at rest/in transit, and SOC2 compliant architecture design are baked into every phase of development.
-              </p>
-            </div>
-
-            <div className="space-y-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FF7A00]/10 text-[#FF7A00]">
-                <Layers className="h-5 w-5" />
-              </div>
-              <h3 className="text-lg font-extrabold text-[#1A1A1A]">Scalable Foundation</h3>
-              <p className="text-xs leading-relaxed text-[#4A4A4A]">
-                We build system foundations designed to support 100x user growth without requiring costly structural overhauls down the line.
-              </p>
-            </div>
+        {/* ------------------- 6. WHY YUKTI? SECTION (UPDATED) ------------------- */}
+        <section className="space-y-10">
+          <div className="text-center space-y-2 max-w-3xl mx-auto">
+            <span className="text-xs font-black uppercase tracking-widest text-[#0D9488]">
+              WHY YUKTI
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A]">
+              Technology With Purpose. <span className="text-[#FF7A00]">Built Around You.</span>
+            </h2>
+            <p className="text-xs sm:text-sm text-[#334155] leading-relaxed max-w-2xl mx-auto font-normal">
+              We believe great technology isn't about adding more features—it's about solving the right problems with the right approach.
+            </p>
           </div>
-        </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {whyYuktiPoints.map((point) => {
+              const Icon = point.icon;
+              return (
+                <Card3DTilt key={point.num}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5 }}
+                    className="h-full rounded-2xl bg-white p-7 shadow-lg border border-slate-200/90 flex flex-col justify-between space-y-6 glass-card-hover group relative overflow-hidden transform-style-3d"
+                  >
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${point.iconBg} text-white shadow-md group-hover:scale-110 transition-transform`}>
+                          <Icon className="h-5 w-5" />
+                        </div>
+                        <span className={`text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full border ${point.badgeBg}`}>
+                          0{point.num}
+                        </span>
+                      </div>
+
+                      <h3 className="text-lg font-extrabold text-[#0F172A] group-hover:text-[#FF7A00] transition-colors">
+                        {point.title}
+                      </h3>
+
+                      <p className="text-xs sm:text-sm text-[#334155] leading-relaxed font-normal">
+                        {point.desc}
+                      </p>
+                    </div>
+
+                    <div className={`h-1 w-full rounded-full ${point.iconBg}`} />
+                  </motion.div>
+                </Card3DTilt>
+              );
+            })}
+          </div>
+        </section>
+
       </div>
+
+      {/* ------------------- 7. STRONG FINAL CTA SECTION (Full-Width) ------------------- */}
+      <section className="relative w-full bg-[#0F172A] py-16 sm:py-20 md:py-24 overflow-hidden border-y border-slate-800 text-white z-10 mt-16 mb-16 md:mb-24">
+        {/* Overlapping Saffron Symmetrical/Abstract Circle shape on the right edge - Optimized for Mobile responsiveness */}
+        <div className="absolute right-[-25%] sm:right-[-15%] lg:right-[-10%] top-[-10%] sm:top-[-20%] lg:top-1/2 lg:-translate-y-1/2 w-[320px] h-[320px] sm:w-[480px] sm:h-[480px] lg:w-[600px] lg:h-[600px] bg-[#FF7A00] rounded-full opacity-[0.9] pointer-events-none z-0" />
+        
+        {/* Harmonious Ambient Glows */}
+        <div className="absolute -top-20 -left-20 h-64 w-64 rounded-full bg-[#0D9488]/15 blur-3xl pointer-events-none z-0" />
+        <div className="absolute inset-0 bg-radial from-slate-800/10 to-transparent pointer-events-none z-0" />
+
+        {/* Content Container aligned with site grid */}
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center text-left">
+            {/* Left Side: Serif Heading & Subtle curved vector line */}
+            <div className="lg:col-span-7 space-y-4 relative">
+              {/* Subtle curved line graphic */}
+              <div className="absolute left-[-20px] top-[-35px] w-48 h-48 opacity-15 pointer-events-none hidden sm:block">
+                <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.8" className="w-full h-full text-white">
+                  <path d="M10,90 C30,30 50,70 95,20" />
+                </svg>
+              </div>
+
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-medium tracking-tight text-white leading-[1.2] relative z-10">
+                Ready to Transform Your <span className="italic block mt-1 font-serif text-[#0D9488] sm:text-white">Business with AI?</span>
+              </h2>
+            </div>
+
+            {/* Right Side: Serif Description & Flat Clean White Button */}
+            <div className="lg:col-span-5 space-y-7 relative z-10 flex flex-col items-start">
+              <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-serif">
+                Let's Define Your Requirements And Architect A Tailored AI Solution That Intelligently Optimizes And Scales Your Operations.
+              </p>
+
+              <Link href="/contact" className="no-underline">
+                <motion.div
+                  whileHover={{ scale: 1.04, y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="px-8 py-3.5 bg-white text-[#0F172A] font-black uppercase tracking-widest text-[11px] rounded-lg hover:bg-slate-100 transition-all shadow-lg shadow-black/15 cursor-pointer"
+                >
+                  Get in touch
+                </motion.div>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
