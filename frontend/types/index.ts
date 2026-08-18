@@ -68,6 +68,7 @@ export interface Project {
   long_description: string;
   client: string | null;
   industry: string | null;
+  tech_stack: string | null;
   services_details: Service[];
   services_ids?: number[];
   live_url: string | null;

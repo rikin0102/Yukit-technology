@@ -2,7 +2,7 @@
 
 import React, { useRef, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ImageIcon, UploadCloud, Trash2, CheckCircle2, FileText, Download } from 'lucide-react';
+import { ImageIcon, UploadCloud, Trash2, FileText, Download } from 'lucide-react';
 import Image from 'next/image';
 import { mediaService } from '@/services/api';
 import { MediaFile } from '@/types';
@@ -61,10 +61,10 @@ export default function AdminMediaPage() {
   return (
     <div className="space-y-8">
       {/* Page Title */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[rgba(197,168,128,0.1)] pb-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-6">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Media Bank Manager</h1>
-          <p className="text-xs text-muted mt-1">Upload and manage image assets. Files are compressed on upload.</p>
+          <h1 className="text-2xl font-black text-slate-800">Media Bank Manager</h1>
+          <p className="text-xs text-slate-400 mt-1 font-medium">Upload and manage image assets. Files are compressed on upload.</p>
         </div>
 
         {/* Upload Trigger */}
@@ -79,14 +79,14 @@ export default function AdminMediaPage() {
           <button
             onClick={triggerUpload}
             disabled={uploading}
-            className="button-premium bg-gold-gradient text-background px-5 py-2.5 rounded text-xs font-bold uppercase tracking-wider flex items-center space-x-2 cursor-pointer disabled:opacity-50"
+            className="w-full py-2.5 px-5 rounded-xl text-xs font-black uppercase tracking-widest text-white bg-[#FF7A00] hover:bg-[#E06C00] shadow-md shadow-amber-500/20 transition-all duration-300 flex items-center space-x-2 cursor-pointer disabled:opacity-50"
           >
             {uploading ? (
               <span className="animate-pulse">Optimizing Upload...</span>
             ) : (
               <>
-                <UploadCloud className="h-4 w-4 text-background" />
-                <span>Upload Assets</span>
+                <UploadCloud className="h-4 w-4 text-white" />
+                <span className="text-white font-black tracking-widest">Upload Assets</span>
               </>
             )}
           </button>
@@ -96,13 +96,13 @@ export default function AdminMediaPage() {
       {/* Grid listing files */}
       {isLoading ? (
         <div className="flex justify-center py-20">
-          <div className="h-8 w-8 animate-spin rounded-full border border-primary border-t-transparent" />
+          <div className="h-8 w-8 animate-spin rounded-full border border-[#0D9488] border-t-transparent" />
         </div>
       ) : !mediaFiles || mediaFiles.length === 0 ? (
-        <div className="glass-panel p-16 text-center flex flex-col items-center justify-center space-y-4 rounded-xl">
-          <ImageIcon className="h-12 w-12 text-muted stroke-[1.25]" />
-          <h3 className="text-sm font-bold text-foreground">Media Bank Empty</h3>
-          <p className="text-xs text-muted max-w-xs leading-relaxed">
+        <div className="bg-white border border-slate-200 p-16 text-center flex flex-col items-center justify-center space-y-4 rounded-2xl shadow-sm">
+          <ImageIcon className="h-12 w-12 text-slate-300 stroke-[1.25]" />
+          <h3 className="text-sm font-black text-slate-800">Media Bank Empty</h3>
+          <p className="text-xs text-slate-400 max-w-xs leading-relaxed font-bold">
             No files uploaded yet. Drag or choose a file above to initiate automated Pillow compression.
           </p>
         </div>
@@ -116,10 +116,10 @@ export default function AdminMediaPage() {
             return (
               <div
                 key={file.id}
-                className="glass-panel rounded-xl overflow-hidden border border-white/5 bg-card-bg flex flex-col justify-between group relative"
+                className="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between group relative transition-all duration-300 hover:shadow-md"
               >
                 {/* Visual Preview */}
-                <div className="relative h-32 w-full bg-black/40 border-b border-white/5 flex items-center justify-center overflow-hidden">
+                <div className="relative h-32 w-full bg-slate-50 border-b border-slate-100 flex items-center justify-center overflow-hidden">
                   {isImage && thumbLink ? (
                     <Image
                       src={thumbLink}
@@ -129,14 +129,14 @@ export default function AdminMediaPage() {
                       className="object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   ) : (
-                    <FileText className="h-10 w-10 text-muted stroke-[1.25]" />
+                    <FileText className="h-10 w-10 text-slate-300 stroke-[1.25]" />
                   )}
                   
                   {/* Delete Hover action */}
-                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center space-x-2">
+                  <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center space-x-2 backdrop-blur-xs">
                     <button
                       onClick={() => handleDelete(file.id)}
-                      className="p-2 rounded-full bg-red-500/20 text-red-400 hover:bg-red-500/40 hover:text-white transition-all cursor-pointer"
+                      className="p-2 rounded-full bg-red-500/20 text-red-200 hover:bg-red-500 hover:text-white transition-all cursor-pointer"
                       title="Delete Asset"
                     >
                       <Trash2 className="h-4.5 w-4.5" />
@@ -145,20 +145,20 @@ export default function AdminMediaPage() {
                       href={fileLink}
                       target="_blank"
                       rel="noreferrer"
-                      className="p-2 rounded-full bg-white/5 text-foreground hover:bg-white/10 transition-all"
+                      className="p-2 rounded-full bg-slate-100/20 text-white hover:bg-slate-100/40 transition-all"
                       title="View File"
                     >
-                      <Download className="h-4.5 w-4.5" />
+                      <Download className="h-4.5 w-4.5 text-white" />
                     </a>
                   </div>
                 </div>
 
                 {/* File Details */}
                 <div className="p-3.5 space-y-1">
-                  <p className="text-[10px] font-semibold text-foreground truncate select-all" title={file.file_name}>
+                  <p className="text-[10px] font-extrabold text-slate-800 truncate select-all" title={file.file_name}>
                     {file.file_name}
                   </p>
-                  <div className="flex justify-between text-[8px] text-muted">
+                  <div className="flex justify-between text-[8px] text-slate-400 font-bold">
                     <span className="font-mono">{file.formatted_size}</span>
                     <span className="uppercase">{file.mime_type.split('/')[1]}</span>
                   </div>

@@ -1,4 +1,6 @@
 import logging
+from django.core.mail import send_mail
+from django.conf import settings
 from inquiries.models import Inquiry
 from analytics.services import AnalyticsService
 from analytics.models import AnalyticsEvent
@@ -27,7 +29,30 @@ class InquiryService:
             user_agent=user_agent
         )
         
-        # Send automated email notification (mock log output in service layer)
-        logger.info(f"Mock email notification sent to admins for Inquiry ID {inquiry.id}")
+        # Send automated email notification to admin
+        try:
+            subject = f"New Contact Inquiry from {inquiry.name} - Yukti Technologies"
+            message = (
+                f"You have received a new contact inquiry from the website.\n\n"
+                f"--- Details ---\n"
+                f"Name: {inquiry.name}\n"
+                f"Email: {inquiry.email}\n"
+                f"Company: {inquiry.company or 'N/A'}\n"
+                f"Phone: {inquiry.phone or 'N/A'}\n"
+                f"Status: {inquiry.status}\n\n"
+                f"Message:\n"
+                f"{inquiry.message}\n"
+            )
+            recipient_list = ['rikinp0102@gmail.com']
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=recipient_list,
+                fail_silently=False
+            )
+            logger.info(f"Email notification successfully sent for Inquiry ID {inquiry.id}")
+        except Exception as e:
+            logger.error(f"Failed to send email notification for Inquiry ID {inquiry.id}: {str(e)}")
         
         return inquiry

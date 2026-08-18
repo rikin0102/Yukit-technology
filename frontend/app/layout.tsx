@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import { Outfit } from 'next/font/google';
 import { Providers } from '@/components/common/Providers';
-import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
+import { LayoutWrapper } from '@/components/layout/LayoutWrapper';
 import GlobalScrollBackground from '@/components/animations/GlobalScrollBackground';
 import './globals.css';
 
@@ -31,11 +30,9 @@ export default function RootLayout({
         <Providers>
           {/* Global AI & Software Scroll-Animated Background */}
           <GlobalScrollBackground />
-          <Header />
-          <main className="flex-grow pt-20 relative z-10">
+          <LayoutWrapper>
             {children}
-          </main>
-          <Footer />
+          </LayoutWrapper>
         </Providers>
       </body>
     </html>

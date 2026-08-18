@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Tag, Sparkles } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { projectService } from '@/services/api';
 import ProjectDetailModal, { ProjectData } from '@/components/modals/ProjectDetailModal';
 import Card3DTilt from '@/components/animations/Card3DTilt';
 
@@ -78,8 +80,66 @@ const projectsList: StyledProject[] = [
 export default function ProjectsPage() {
   const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
 
+  // Fetch projects dynamically from Django backend API
+  const { data: apiProjects } = useQuery({
+    queryKey: ['projects_list_page'],
+    queryFn: () => projectService.list(),
+  });
+
+  const colorPatterns = [
+    {
+      accentColor: '#FF7A00',
+      badgeStyle: 'bg-[#FF7A00]/10 text-[#FF7A00] border-[#FF7A00]/30',
+      btnGradient: 'bg-gradient-to-r from-[#FF7A00] to-[#E06C00] hover:from-[#E06C00] hover:to-[#C55F00] shadow-amber-500/20',
+      glareColor: 'rgba(255, 122, 0, 0.4)',
+    },
+    {
+      accentColor: '#2563EB',
+      badgeStyle: 'bg-[#2563EB]/10 text-[#2563EB] border-[#2563EB]/30',
+      btnGradient: 'bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[#1E40AF] shadow-blue-500/20',
+      glareColor: 'rgba(37, 99, 235, 0.4)',
+    },
+    {
+      accentColor: '#0D9488',
+      badgeStyle: 'bg-[#0D9488]/10 text-[#0D9488] border-[#0D9488]/30',
+      btnGradient: 'bg-gradient-to-r from-[#0D9488] to-[#0F766E] hover:from-[#0F766E] hover:to-[#115E59] shadow-teal-500/20',
+      glareColor: 'rgba(13, 148, 136, 0.4)',
+    },
+  ];
+
+  const mappedApiProjects: StyledProject[] = (apiProjects || [])
+    .filter((p: any) => p.status === 'PUBLISHED')
+    .map((project: any, idx: number) => {
+      const pattern = colorPatterns[idx % colorPatterns.length];
+      
+      const techStack = project.tech_stack
+        ? project.tech_stack.split(',').map((s: string) => s.trim()).filter((s: string) => s !== '')
+        : (project.services_details ? project.services_details.map((s: any) => s.title) : []);
+      
+      return {
+        id: project.slug,
+        title: project.title,
+        category: project.industry || 'Software Engineering',
+        image: project.featured_image?.file_url || '/images/custom-software.png',
+        shortDesc: project.description,
+        fullDesc: project.long_description,
+        keyFeatures: project.long_description ? project.long_description.split('\n').filter((l: string) => l.trim() !== '') : [],
+        techStack: techStack,
+        demoUrl: project.live_url || undefined,
+        client: project.client || undefined,
+        ...pattern,
+      };
+    });
+
+  const displayedProjects = mappedApiProjects.length > 0 ? mappedApiProjects : projectsList;
+
   return (
-    <div className="relative min-h-screen text-[#334155] py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      className="relative min-h-screen text-[#334155] py-12 sm:py-16 px-4 sm:px-6 lg:px-8"
+    >
       <div className="mx-auto max-w-6xl space-y-10 relative z-10">
         {/* Header - Indian Flag Color Accent Sequence */}
         <div className="text-center max-w-3xl mx-auto space-y-3">
@@ -104,10 +164,9 @@ export default function ProjectsPage() {
           </motion.p>
         </div>
 
-        {/* 3 Showcase Project Cards (Short Size, Clean Front, Tricolor Accents) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {projectsList.map((project, idx) => (
-            <Card3DTilt key={project.id}>
+          {displayedProjects.map((project, idx) => (
+            <Card3DTilt key={project.id} glareColor={(project as any).glareColor}>
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -161,6 +220,6 @@ export default function ProjectsPage() {
           project={selectedProject}
         />
       )}
-    </div>
+    </motion.div>
   );
 }

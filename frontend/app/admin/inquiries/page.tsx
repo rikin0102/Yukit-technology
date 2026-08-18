@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Inbox, Trash2, CheckCircle2, RefreshCw, Layers } from 'lucide-react';
+import { Inbox, Trash2, Layers } from 'lucide-react';
 import { inquiryService, pricingService } from '@/services/api';
 import { Inquiry, PricingInquiry } from '@/types';
 
@@ -51,29 +51,29 @@ export default function AdminInquiriesPage() {
   return (
     <div className="space-y-8">
       {/* Page Title */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[rgba(197,168,128,0.1)] pb-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-6">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Inquiries Manager</h1>
-          <p className="text-xs text-muted mt-1">Review contact tickets and customized estimator quotes.</p>
+          <h1 className="text-2xl font-black text-slate-800">Inquiries Manager</h1>
+          <p className="text-xs text-slate-400 mt-1 font-medium">Review contact tickets and customized estimator quotes.</p>
         </div>
 
         {/* Tab switchers */}
-        <div className="flex bg-[#0d0d12] border border-white/5 rounded-lg p-1 text-[10px] font-bold uppercase tracking-wider">
+        <div className="flex bg-slate-100 border border-slate-200 rounded-xl p-1 text-[10px] font-bold uppercase tracking-wider">
           <button
             onClick={() => setTab('contact')}
-            className={`px-4 py-2 rounded-md transition-all cursor-pointer ${
-              tab === 'contact' ? 'bg-[rgba(197,168,128,0.1)] text-primary' : 'text-muted hover:text-foreground'
+            className={`px-4 py-2 rounded-lg transition-all cursor-pointer font-black ${
+              tab === 'contact' ? 'bg-white text-[#0D9488] shadow-sm' : 'text-slate-500 hover:text-slate-800'
             }`}
           >
             General Contacts ({contacts?.length || 0})
           </button>
           <button
             onClick={() => setTab('pricing')}
-            className={`px-4 py-2 rounded-md transition-all cursor-pointer ${
-              tab === 'pricing' ? 'bg-[rgba(197,168,128,0.1)] text-primary' : 'text-muted hover:text-foreground'
+            className={`px-4 py-2 rounded-lg transition-all cursor-pointer font-black ${
+              tab === 'pricing' ? 'bg-white text-[#0D9488] shadow-sm' : 'text-slate-500 hover:text-slate-800'
             }`}
           >
-            Pricing Calculator Quotes ({pricings?.length || 0})
+            Pricing Quotes ({pricings?.length || 0})
           </button>
         </div>
       </div>
@@ -82,45 +82,45 @@ export default function AdminInquiriesPage() {
         // Contacts Table
         contactsLoading ? (
           <div className="flex justify-center py-20">
-            <div className="h-8 w-8 animate-spin rounded-full border border-primary border-t-transparent" />
+            <div className="h-8 w-8 animate-spin rounded-full border border-[#0D9488] border-t-transparent" />
           </div>
         ) : !contacts || contacts.length === 0 ? (
-          <div className="glass-panel p-12 text-center flex flex-col items-center justify-center space-y-3 rounded-xl">
-            <Inbox className="h-10 w-10 text-muted" />
-            <h3 className="text-sm font-bold text-foreground">No General Inquiries</h3>
-            <p className="text-xs text-muted">All clear! No contact inquiries recorded yet.</p>
+          <div className="bg-white border border-slate-200 p-12 text-center flex flex-col items-center justify-center space-y-3 rounded-2xl shadow-sm">
+            <Inbox className="h-10 w-10 text-slate-300" />
+            <h3 className="text-sm font-black text-slate-800">No General Inquiries</h3>
+            <p className="text-xs text-slate-400 font-bold">All clear! No contact inquiries recorded yet.</p>
           </div>
         ) : (
-          <div className="glass-panel rounded-xl overflow-hidden border border-[rgba(197,168,128,0.1)] overflow-x-auto">
+          <div className="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="bg-secondary/40 border-b border-white/5 uppercase tracking-widest font-bold text-muted text-[10px]">
+                <tr className="bg-slate-50 border-b border-slate-200 uppercase tracking-widest font-black text-slate-400 text-[10px]">
                   <th className="p-4">Sender Details</th>
                   <th className="p-4">Message</th>
                   <th className="p-4">Status Flag</th>
                   <th className="p-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5 text-muted leading-relaxed">
+              <tbody className="divide-y divide-slate-100 text-slate-600 leading-relaxed font-medium">
                 {contacts.map((contact) => (
-                  <tr key={contact.id} className="hover:bg-white/[0.01] transition-all">
+                  <tr key={contact.id} className="hover:bg-slate-50 transition-all">
                     {/* User Info */}
                     <td className="p-4 space-y-1 select-text">
-                      <p className="font-bold text-foreground">{contact.name}</p>
-                      <p className="text-[10px] text-muted">{contact.email}</p>
-                      {contact.company && <p className="text-[9px] text-primary">{contact.company}</p>}
-                      {contact.phone && <p className="text-[9px] text-muted font-mono">{contact.phone}</p>}
+                      <p className="font-extrabold text-slate-800">{contact.name}</p>
+                      <p className="text-[10px] text-slate-400 font-bold">{contact.email}</p>
+                      {contact.company && <p className="text-[9px] text-[#0D9488] font-bold">{contact.company}</p>}
+                      {contact.phone && <p className="text-[9px] text-slate-400 font-bold font-mono">{contact.phone}</p>}
                     </td>
                     
                     {/* Message Body */}
-                    <td className="p-4 max-w-sm whitespace-pre-wrap select-text">{contact.message}</td>
+                    <td className="p-4 max-w-sm whitespace-pre-wrap select-text text-slate-600">{contact.message}</td>
                     
                     {/* Status Dropdown */}
                     <td className="p-4">
                       <select
                         value={contact.status}
                         onChange={(e) => handleStatusChange(contact.id, e.target.value)}
-                        className="bg-[#0b0b0f] border border-white/10 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none cursor-pointer"
+                        className="bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 focus:outline-none focus:border-[#0D9488] focus:ring-1 focus:ring-[#0D9488] cursor-pointer font-bold"
                       >
                         <option value="NEW">New</option>
                         <option value="IN_PROGRESS">In Progress</option>
@@ -132,7 +132,7 @@ export default function AdminInquiriesPage() {
                     <td className="p-4 text-right">
                       <button
                         onClick={() => handleDelete(contact.id)}
-                        className="text-muted hover:text-red-400 p-2 rounded hover:bg-red-500/10 transition-all cursor-pointer"
+                        className="text-slate-400 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 transition-all cursor-pointer"
                         title="Delete Inquiry"
                       >
                         <Trash2 className="h-4.5 w-4.5" />
@@ -148,44 +148,44 @@ export default function AdminInquiriesPage() {
         // Pricing Quotes Table
         pricingsLoading ? (
           <div className="flex justify-center py-20">
-            <div className="h-8 w-8 animate-spin rounded-full border border-primary border-t-transparent" />
+            <div className="h-8 w-8 animate-spin rounded-full border border-[#0D9488] border-t-transparent" />
           </div>
         ) : !pricings || pricings.length === 0 ? (
-          <div className="glass-panel p-12 text-center flex flex-col items-center justify-center space-y-3 rounded-xl">
-            <Layers className="h-10 w-10 text-muted" />
-            <h3 className="text-sm font-bold text-foreground">No Calculator Quotes</h3>
-            <p className="text-xs text-muted">No custom calculator quotes recorded yet.</p>
+          <div className="bg-white border border-slate-200 p-12 text-center flex flex-col items-center justify-center space-y-3 rounded-2xl shadow-sm">
+            <Layers className="h-10 w-10 text-slate-300" />
+            <h3 className="text-sm font-black text-slate-800">No Calculator Quotes</h3>
+            <p className="text-xs text-slate-400 font-bold">No custom calculator quotes recorded yet.</p>
           </div>
         ) : (
-          <div className="glass-panel rounded-xl overflow-hidden border border-[rgba(197,168,128,0.1)] overflow-x-auto">
+          <div className="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="bg-secondary/40 border-b border-white/5 uppercase tracking-widest font-bold text-muted text-[10px]">
+                <tr className="bg-slate-50 border-b border-slate-200 uppercase tracking-widest font-black text-slate-400 text-[10px]">
                   <th className="p-4">Company Details</th>
                   <th className="p-4">System Requirements</th>
                   <th className="p-4">Est. Budget</th>
                   <th className="p-4">Configuration JSON</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5 text-muted leading-relaxed">
+              <tbody className="divide-y divide-slate-100 text-slate-600 leading-relaxed font-medium">
                 {pricings.map((pricing) => (
-                  <tr key={pricing.id} className="hover:bg-white/[0.01] transition-all">
+                  <tr key={pricing.id} className="hover:bg-slate-50 transition-all">
                     {/* Company details */}
                     <td className="p-4 space-y-1 select-text">
-                      <p className="font-bold text-foreground">{pricing.name}</p>
-                      <p className="text-[10px] text-muted">{pricing.email}</p>
-                      <p className="text-[9px] text-primary">{pricing.company || 'Private client'}</p>
+                      <p className="font-extrabold text-slate-800">{pricing.name}</p>
+                      <p className="text-[10px] text-slate-400 font-bold">{pricing.email}</p>
+                      <p className="text-[9px] text-[#0D9488] font-bold">{pricing.company || 'Private client'}</p>
                     </td>
 
                     {/* Requirements */}
-                    <td className="p-4 max-w-xs whitespace-pre-wrap select-text">{pricing.requirements}</td>
+                    <td className="p-4 max-w-xs whitespace-pre-wrap select-text text-slate-600">{pricing.requirements}</td>
 
                     {/* Estimate budget */}
-                    <td className="p-4 font-mono font-bold text-foreground">{pricing.estimated_budget}</td>
+                    <td className="p-4 font-mono font-bold text-slate-800">{pricing.estimated_budget}</td>
 
                     {/* JSON Config details */}
                     <td className="p-4">
-                      <pre className="bg-[#050507] border border-white/5 rounded p-2 text-[9px] font-mono text-muted max-w-xs overflow-x-auto">
+                      <pre className="bg-slate-50 border border-slate-100 rounded-xl p-3 text-[9px] font-mono text-slate-500 max-w-xs overflow-x-auto shadow-inner">
                         {JSON.stringify(pricing.custom_configuration, null, 2)}
                       </pre>
                     </td>

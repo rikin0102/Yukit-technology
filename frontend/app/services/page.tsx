@@ -14,20 +14,11 @@ import {
   Server,
   Sparkles,
   Layers,
-  CheckCircle2,
+  ArrowRight,
 } from 'lucide-react';
 
-import Service3DCard from '@/components/animations/Service3DCard';
 import GetQuoteModal from '@/components/modals/GetQuoteModal';
-
-const categoryFilters = [
-  { id: 'all', label: 'All Capabilities', count: 8 },
-  { id: 'web', label: 'Web & SaaS', count: 3 },
-  { id: 'mobile', label: 'Mobile Apps', count: 1 },
-  { id: 'ai', label: 'AI & Intelligence', count: 1 },
-  { id: 'design', label: 'UI/UX Systems', count: 1 },
-  { id: 'cloud', label: 'Cloud & API', count: 2 },
-];
+import ServiceDetailModal, { ServiceData } from '@/components/modals/ServiceDetailModal';
 
 const servicesList = [
   {
@@ -38,7 +29,7 @@ const servicesList = [
     title: 'Custom Website Development',
     targetAudience: 'For: Businesses, startups, professionals & local brands.',
     icon: Globe,
-    image: '/images/custom-dev.png',
+    image: '/images/custom-dev-v2.jpg',
     metricsBadge: '⚡ Sub-Second Load Speed',
     desc: 'Are you looking for bespoke, high-performance web development which is secure, scalable, and simple to adapt and deploy? You can count upon our talented engineering team with exceptional web experience to solve your complex business problems.',
     subDesc: 'On understanding and analyzing the objectives of your business strategy, we ensure on-time achievement of outcomes by following a rigorous quality process at all stages of our association, right from discovery to deployment and maintenance.',
@@ -61,7 +52,7 @@ const servicesList = [
     title: 'Website Application Development',
     targetAudience: 'Core Software Development Service for Scalable Digital Products',
     icon: Code2,
-    image: '/images/web-dev.png',
+    image: '/images/web-dev-v2.png',
     metricsBadge: '🚀 99.99% SaaS Uptime',
     desc: 'Architecting robust, enterprise-grade web applications, SaaS platforms, and internal management engines with secure role-based access, real-time telemetry, and high throughput.',
     subDesc: 'We align full-stack frontend reactive frameworks with battle-tested Python Django and FastAPI backends, delivering seamless API performance, relational database scaling, and zero-latency operational workflows.',
@@ -84,7 +75,7 @@ const servicesList = [
     title: 'Mobile App Development',
     targetAudience: 'Cross-Platform Native Experience for B2B & B2C Apps',
     icon: Smartphone,
-    image: '/images/app-dev.png',
+    image: '/images/app-dev-v2.jpg',
     metricsBadge: '📱 iOS & Android Native',
     desc: 'Designing and building cross-platform native iOS and Android mobile applications powered by React Native and Flutter, with offline synchronization and push notifications.',
     subDesc: 'From consumer apps with smooth gesture animations to enterprise field-work telemetry tools, our mobile solutions are engineered for battery efficiency, low memory footprint, and instant App Store & Play Store compliance.',
@@ -108,7 +99,7 @@ const servicesList = [
     title: 'AI Development & Integration',
     targetAudience: '⭐ Yukti Engineering Suite — AI Differentiator Service',
     icon: BrainCircuit,
-    image: '/images/ai-dev.png',
+    image: '/images/ai-dev-v2.jpg',
     metricsBadge: '🧠 Real-Time LLM Pipeline',
     desc: 'Unlocking competitive advantage by embedding customized AI pipelines, Large Language Model (LLM) agents, automated document intelligence, and predictive machine learning models directly into your business software.',
     subDesc: 'We specialize in RAG (Retrieval-Augmented Generation), vector databases, intelligent speech-to-text workflows, and automated decision engines using PyTorch, OpenAI, and LangChain.',
@@ -218,14 +209,98 @@ const servicesList = [
   },
 ];
 
+const serviceColorSchemes = [
+  // 1st: Orange
+  {
+    solidBg: 'bg-[#FF7A00]',
+    accentHex: '#FF7A00',
+    lightBg: 'bg-amber-50/80',
+    badgeStyle: 'bg-amber-50 text-[#FF7A00] border-amber-200/80',
+    borderGlow: 'hover:border-amber-500/40 hover:shadow-amber-500/10',
+    btnGradient: 'bg-gradient-to-r from-[#FF7A00] to-[#E06C00] hover:from-[#E06C00] hover:to-[#C55F00]',
+  },
+  // 2nd: Blue
+  {
+    solidBg: 'bg-[#2563EB]',
+    accentHex: '#2563EB',
+    lightBg: 'bg-blue-50/80',
+    badgeStyle: 'bg-blue-50 text-[#2563EB] border-blue-200/80',
+    borderGlow: 'hover:border-blue-500/40 hover:shadow-blue-500/10',
+    btnGradient: 'bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[#1E40AF]',
+  },
+  // 3rd: Green
+  {
+    solidBg: 'bg-[#0D9488]',
+    accentHex: '#0D9488',
+    lightBg: 'bg-teal-50/80',
+    badgeStyle: 'bg-teal-50 text-[#0D9488] border-teal-200/80',
+    borderGlow: 'hover:border-teal-500/40 hover:shadow-teal-500/10',
+    btnGradient: 'bg-gradient-to-r from-[#0D9488] to-[#0F766E] hover:from-[#0F766E] hover:to-[#115E59]',
+  },
+  // 4th: Orange
+  {
+    solidBg: 'bg-[#FF7A00]',
+    accentHex: '#FF7A00',
+    lightBg: 'bg-amber-50/80',
+    badgeStyle: 'bg-amber-50 text-[#FF7A00] border-amber-200/80',
+    borderGlow: 'hover:border-amber-500/40 hover:shadow-amber-500/10',
+    btnGradient: 'bg-gradient-to-r from-[#FF7A00] to-[#E06C00] hover:from-[#E06C00] hover:to-[#C55F00]',
+  },
+  // 5th: Blue
+  {
+    solidBg: 'bg-[#2563EB]',
+    accentHex: '#2563EB',
+    lightBg: 'bg-blue-50/80',
+    badgeStyle: 'bg-blue-50 text-[#2563EB] border-blue-200/80',
+    borderGlow: 'hover:border-blue-500/40 hover:shadow-blue-500/10',
+    btnGradient: 'bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[#1E40AF]',
+  },
+  // 6th: Green
+  {
+    solidBg: 'bg-[#0D9488]',
+    accentHex: '#0D9488',
+    lightBg: 'bg-teal-50/80',
+    badgeStyle: 'bg-teal-50 text-[#0D9488] border-teal-200/80',
+    borderGlow: 'hover:border-teal-500/40 hover:shadow-teal-500/10',
+    btnGradient: 'bg-gradient-to-r from-[#0D9488] to-[#0F766E] hover:from-[#0F766E] hover:to-[#115E59]',
+  },
+  // 7th: Orange
+  {
+    solidBg: 'bg-[#FF7A00]',
+    accentHex: '#FF7A00',
+    lightBg: 'bg-amber-50/80',
+    badgeStyle: 'bg-amber-50 text-[#FF7A00] border-amber-200/80',
+    borderGlow: 'hover:border-amber-500/40 hover:shadow-amber-500/10',
+    btnGradient: 'bg-gradient-to-r from-[#FF7A00] to-[#E06C00] hover:from-[#E06C00] hover:to-[#C55F00]',
+  },
+  // 8th: Blue
+  {
+    solidBg: 'bg-[#2563EB]',
+    accentHex: '#2563EB',
+    lightBg: 'bg-blue-50/80',
+    badgeStyle: 'bg-blue-50 text-[#2563EB] border-blue-200/80',
+    borderGlow: 'hover:border-blue-500/40 hover:shadow-blue-500/10',
+    btnGradient: 'bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[#1E40AF]',
+  },
+];
+
 export default function ServicesPage() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [selectedProjectType, setSelectedProjectType] = useState('Custom Website Development');
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<ServiceData | null>(null);
+  const [selectedServiceIndex, setSelectedServiceIndex] = useState<number>(0);
 
   const handleOpenQuote = (type: string) => {
     setSelectedProjectType(type);
     setIsQuoteModalOpen(true);
+  };
+
+  const handleOpenDetails = (service: any, index: number) => {
+    setSelectedService(service);
+    setSelectedServiceIndex(index);
+    setIsDetailModalOpen(true);
   };
 
   const filteredServices =
@@ -234,7 +309,12 @@ export default function ServicesPage() {
       : servicesList.filter((s) => s.category === activeCategory);
 
   return (
-    <div className="relative min-h-screen text-[#334155] py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      className="relative min-h-screen text-[#334155] py-12 sm:py-16 px-4 sm:px-6 lg:px-8 overflow-x-hidden"
+    >
       <div className="mx-auto max-w-7xl space-y-10 sm:space-y-14 relative z-10">
         {/* ========================================================================= */}
         {/* HERO / HEADER SECTION */}
@@ -264,34 +344,6 @@ export default function ServicesPage() {
             From custom high-throughput web applications to deep neural AI agents and automated Kubernetes cloud pipelines, explore our 8 core engineering disciplines.
           </motion.p>
 
-          {/* Interactive Category Filter Bar */}
-          <div className="pt-4 flex flex-wrap items-center justify-center gap-2">
-            {categoryFilters.map((cat) => {
-              const isActive = activeCategory === cat.id;
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => setActiveCategory(cat.id)}
-                  className={`px-4 py-2 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-200 cursor-pointer flex items-center space-x-2 border ${
-                    isActive
-                      ? 'bg-[#0F172A] text-white border-[#0F172A] shadow-md shadow-slate-900/15 scale-105'
-                      : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:bg-slate-50'
-                  }`}
-                >
-                  <span>{cat.label}</span>
-                  <span
-                    className={`text-[10px] px-1.5 py-0.2 rounded-full font-extrabold ${
-                      isActive
-                        ? 'bg-[#0D9488] text-white'
-                        : 'bg-slate-100 text-slate-500'
-                    }`}
-                  >
-                    {cat.count}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
         </div>
 
         {/* ========================================================================= */}
@@ -299,37 +351,64 @@ export default function ServicesPage() {
         {/* ========================================================================= */}
         <motion.div layout className="space-y-4 sm:space-y-6">
           <AnimatePresence mode="popLayout">
-            {filteredServices.map((service, idx) => (
-              <motion.div
-                key={service.id}
-                layout
-                initial={{ opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.96 }}
-                transition={{ duration: 0.35 }}
-              >
-                <Service3DCard
-                  id={service.id}
-                  index={idx}
-                  serviceNumber={service.serviceNumber}
-                  isStar={service.isStar}
-                  type={service.type}
-                  category={service.category}
-                  title={service.title}
-                  targetAudience={service.targetAudience}
-                  icon={service.icon}
-                  image={service.image}
-                  desc={service.desc}
-                  subDesc={service.subDesc}
-                  bullets={service.bullets}
-                  tags={service.tags}
-                  ctaLabel={service.ctaLabel}
-                  processFlow={service.processFlow}
-                  metricsBadge={service.metricsBadge}
-                  onOpenQuote={handleOpenQuote}
-                />
-              </motion.div>
-            ))}
+            {filteredServices.map((service, idx) => {
+              const colorScheme = serviceColorSchemes[idx % 8];
+              const isEven = idx % 2 === 0;
+              return (
+                <React.Fragment key={service.id}>
+                  <motion.div
+                    layout
+                    initial={{ opacity: 0, x: isEven ? -30 : 30, y: 20 }}
+                    whileInView={{ opacity: 1, x: 0, y: 0 }}
+                    viewport={{ once: true, margin: '-60px' }}
+                    transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+                    className={`w-full rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md hover:shadow-lg p-5 md:p-6 relative overflow-hidden transition-all duration-300 ${colorScheme.borderGlow} flex flex-col md:flex-row items-center gap-6`}
+                  >
+                    {/* Left Side: Image nested inside card (padded container, does not touch card borders) */}
+                    <div className="w-full md:w-60 lg:w-72 shrink-0 p-2.5 bg-slate-50 border border-slate-200/80 rounded-xl flex items-center justify-center relative z-10">
+                      <div className="w-full aspect-[4/3] rounded-lg overflow-hidden relative bg-slate-950">
+                        <img
+                          src={service.image}
+                          alt={service.title}
+                          loading="lazy"
+                          className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Right Side: Title, Desc, and bottom-right button */}
+                    <div className="flex-1 flex flex-col justify-between py-0.5 relative z-10 w-full md:min-h-[140px]">
+                      <div>
+                        {/* Title */}
+                        <h3 className="text-lg md:text-xl font-extrabold text-[#0F172A] tracking-tight leading-tight mb-2 pt-1">
+                          {service.title}
+                        </h3>
+
+                        {/* Description */}
+                        <p className="text-slate-600 text-xs sm:text-sm leading-relaxed mb-4 max-w-2xl font-normal">
+                          {service.desc}
+                        </p>
+                      </div>
+
+                      {/* Bottom action container to align button bottom-right */}
+                      <div className="flex justify-end items-end mt-4 pt-2 md:pt-0">
+                        <motion.button
+                          whileHover={{ scale: 1.03, y: -1.5 }}
+                          whileTap={{ scale: 0.97 }}
+                          onClick={() => handleOpenDetails(service, idx)}
+                          className={`px-4.5 py-2 rounded-xl text-xs uppercase tracking-wider font-black flex items-center space-x-2 text-white shadow-sm cursor-pointer ${colorScheme.btnGradient}`}
+                        >
+                          <span>View Details</span>
+                          <ArrowRight className="h-4 w-4" />
+                        </motion.button>
+                      </div>
+                    </div>
+                  </motion.div>
+
+
+                </React.Fragment>
+              );
+            })}
           </AnimatePresence>
         </motion.div>
       </div>
@@ -387,6 +466,14 @@ export default function ServicesPage() {
         onClose={() => setIsQuoteModalOpen(false)}
         defaultProjectType={selectedProjectType}
       />
-    </div>
+
+      <ServiceDetailModal
+        isOpen={isDetailModalOpen}
+        onClose={() => setIsDetailModalOpen(false)}
+        service={selectedService}
+        onBookService={handleOpenQuote}
+        index={selectedServiceIndex}
+      />
+    </motion.div>
   );
 }

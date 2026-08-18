@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Phone, Mail, Clock, Send, CheckCircle2, Sparkles } from 'lucide-react';
+import { inquiryService } from '@/services/api';
 
 const COUNTRY_CODES = [
   { code: '+91', country: 'India', flag: '🇮🇳' },
@@ -26,14 +27,28 @@ export default function ContactPage() {
     projectDetails: '',
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsFlying(true);
 
-    setTimeout(() => {
+    try {
+      const fullPhone = formData.phone ? `${formData.countryCode} ${formData.phone}` : '';
+      await inquiryService.create({
+        name: formData.name,
+        email: formData.email,
+        phone: fullPhone,
+        message: formData.projectDetails,
+      });
+
+      setTimeout(() => {
+        setIsFlying(false);
+        setSubmitted(true);
+      }, 1400);
+    } catch (err) {
+      console.error('Failed to submit inquiry:', err);
       setIsFlying(false);
-      setSubmitted(true);
-    }, 1400);
+      alert('Unable to submit inquiry at this time. Please check your internet connection or email us directly.');
+    }
   };
 
   return (

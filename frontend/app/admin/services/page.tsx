@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Cpu, Check, X, Edit, Plus, Trash2, Loader2, Save, ToggleLeft, ToggleRight } from 'lucide-react';
 import { serviceService } from '@/services/api';
-import { Service, ServiceFeature } from '@/types';
+import { Service } from '@/types';
 
 export default function AdminServicesCRUD() {
   const queryClient = useQueryClient();
@@ -106,23 +106,23 @@ export default function AdminServicesCRUD() {
   };
 
   const handleDelete = (slug: string) => {
-    if (confirm('Delete this service capability? (Warning: May delete associated projects!)')) {
+    if (confirm('Are you sure you want to delete this service capability domain?')) {
       deleteMutation.mutate(slug);
     }
-  };
-
-  const handleFeatureChange = (index: number, field: 'title' | 'description', value: string) => {
-    const updated = [...features];
-    updated[index][field] = value;
-    setFeatures(updated);
   };
 
   const addFeatureInput = () => {
     setFeatures([...features, { title: '', description: '' }]);
   };
 
-  const removeFeatureInput = (index: number) => {
-    setFeatures(features.filter((_, idx) => idx !== index));
+  const removeFeatureInput = (idx: number) => {
+    setFeatures(features.filter((_, i) => i !== idx));
+  };
+
+  const handleFeatureChange = (idx: number, field: 'title' | 'description', value: string) => {
+    const next = [...features];
+    next[idx][field] = value;
+    setFeatures(next);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -145,18 +145,18 @@ export default function AdminServicesCRUD() {
   return (
     <div className="space-y-8">
       {/* Page Title */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[rgba(197,168,128,0.1)] pb-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-6">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Capabilities Manager</h1>
-          <p className="text-xs text-muted mt-1">Configure service domains, bullet features list, and toggle active flags.</p>
+          <h1 className="text-2xl font-black text-slate-800">Capabilities Manager</h1>
+          <p className="text-xs text-slate-400 mt-1 font-medium">Configure service domains, bullet features list, and toggle active flags.</p>
         </div>
         <div>
           <button
             onClick={openCreateModal}
-            className="button-premium bg-gold-gradient text-background px-5 py-2.5 rounded text-xs font-bold uppercase tracking-wider flex items-center space-x-2 cursor-pointer"
+            className="w-full py-2.5 px-5 rounded-xl text-xs font-black uppercase tracking-widest text-white bg-[#FF7A00] hover:bg-[#E06C00] shadow-md shadow-amber-500/20 transition-all duration-300 flex items-center space-x-2 cursor-pointer"
           >
-            <Plus className="h-4 w-4 text-background" />
-            <span>Create Domain</span>
+            <Plus className="h-4 w-4 text-white" />
+            <span className="text-white font-black tracking-widest">Create Domain</span>
           </button>
         </div>
       </div>
@@ -164,13 +164,13 @@ export default function AdminServicesCRUD() {
       {/* Services Table */}
       {isLoading ? (
         <div className="flex justify-center py-20">
-          <div className="h-8 w-8 animate-spin rounded-full border border-primary border-t-transparent" />
+          <div className="h-8 w-8 animate-spin rounded-full border border-[#0D9488] border-t-transparent" />
         </div>
       ) : (
-        <div className="glass-panel rounded-xl overflow-hidden border border-[rgba(197,168,128,0.1)] overflow-x-auto">
+        <div className="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="bg-secondary/40 border-b border-white/5 uppercase tracking-widest font-bold text-muted text-[10px]">
+              <tr className="bg-slate-50 border-b border-slate-200 uppercase tracking-widest font-black text-slate-500 text-[10px]">
                 <th className="p-4">Icon & Domain Title</th>
                 <th className="p-4">Short Abstract</th>
                 <th className="p-4">Order</th>
@@ -178,36 +178,36 @@ export default function AdminServicesCRUD() {
                 <th className="p-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5 text-muted leading-relaxed">
+            <tbody className="divide-y divide-slate-100 text-slate-600 leading-relaxed font-medium">
               {services?.map((service) => (
-                <tr key={service.id} className="hover:bg-white/[0.01] transition-all">
+                <tr key={service.id} className="hover:bg-slate-50 transition-all">
                   <td className="p-4 flex items-center space-x-3">
-                    <span className="p-2 rounded bg-white/5 text-primary border border-white/5 font-mono text-[10px]">
+                    <span className="p-2 rounded-lg bg-slate-50 text-[#0D9488] border border-slate-200 font-mono text-[10px] font-bold">
                       {service.icon_identifier}
                     </span>
                     <div>
-                      <p className="font-bold text-foreground">{service.title}</p>
-                      <p className="text-[10px] text-muted">/{service.slug}</p>
+                      <p className="font-extrabold text-slate-800">{service.title}</p>
+                      <p className="text-[10px] text-slate-400 font-bold">/{service.slug}</p>
                     </div>
                   </td>
-                  <td className="p-4 max-w-xs truncate">{service.short_description}</td>
-                  <td className="p-4 font-mono">{service.order}</td>
+                  <td className="p-4 max-w-xs truncate text-slate-600 font-medium">{service.short_description}</td>
+                  <td className="p-4 font-mono font-bold text-slate-800">{service.order}</td>
                   
                   {/* Status Toggle switch */}
                   <td className="p-4">
                     <button
                       onClick={() => handleToggle(service.slug)}
-                      className="text-primary hover:text-primary-hover flex items-center space-x-1.5 transition-colors cursor-pointer"
+                      className="flex items-center space-x-1.5 transition-colors cursor-pointer select-none"
                     >
                       {service.is_active ? (
                         <>
-                          <ToggleRight className="h-6 w-6 text-primary" />
-                          <span className="text-[9px] uppercase tracking-wider text-primary font-bold">Active</span>
+                          <ToggleRight className="h-6 w-6 text-[#0D9488]" />
+                          <span className="text-[9px] uppercase tracking-wider text-[#0D9488] font-black">Active</span>
                         </>
                       ) : (
                         <>
-                          <ToggleLeft className="h-6 w-6 text-muted" />
-                          <span className="text-[9px] uppercase tracking-wider text-muted font-bold">Inactive</span>
+                          <ToggleLeft className="h-6 w-6 text-slate-300" />
+                          <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Inactive</span>
                         </>
                       )}
                     </button>
@@ -217,14 +217,14 @@ export default function AdminServicesCRUD() {
                   <td className="p-4 text-right space-x-2">
                     <button
                       onClick={() => openEditModal(service)}
-                      className="text-muted hover:text-primary p-2 rounded hover:bg-white/5 transition-all cursor-pointer inline-block"
+                      className="text-slate-400 hover:text-[#0D9488] p-2 rounded-lg hover:bg-slate-100 transition-all cursor-pointer inline-block"
                       title="Edit Service"
                     >
                       <Edit className="h-4 w-4" />
                     </button>
                     <button
                       onClick={() => handleDelete(service.slug)}
-                      className="text-muted hover:text-red-400 p-2 rounded hover:bg-red-500/10 transition-all cursor-pointer inline-block"
+                      className="text-slate-400 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 transition-all cursor-pointer inline-block"
                       title="Delete Service"
                     >
                       <Trash2 className="h-4 w-4" />
@@ -239,15 +239,15 @@ export default function AdminServicesCRUD() {
 
       {/* Editor Modal Popup */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 overflow-y-auto">
-          <div className="glass-panel w-full max-w-2xl rounded-xl border border-primary/30 p-8 space-y-6 max-h-[90vh] overflow-y-auto bg-[#070709] relative shadow-2xl animate-float-slow">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-md p-4 overflow-y-auto">
+          <div className="bg-white w-full max-w-2xl rounded-2xl border border-slate-200 p-8 space-y-6 max-h-[90vh] overflow-y-auto relative shadow-2xl">
             
             {/* Header */}
-            <div className="flex justify-between items-center border-b border-white/5 pb-4">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-primary">
+            <div className="flex justify-between items-center border-b border-slate-100 pb-4">
+              <h3 className="text-sm font-black uppercase tracking-wider text-slate-800">
                 {editingService ? `Edit Capability: ${editingService.title}` : 'Create Service Domain'}
               </h3>
-              <button onClick={closeModal} className="text-muted hover:text-foreground cursor-pointer">
+              <button onClick={closeModal} className="text-slate-400 hover:text-slate-800 cursor-pointer transition-colors">
                 <X className="h-5 w-5" />
               </button>
             </div>
@@ -256,7 +256,7 @@ export default function AdminServicesCRUD() {
               {/* Row 1: Title & Slug */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-[10px] uppercase font-bold text-muted">Title Name</label>
+                  <label className="text-[10px] uppercase font-black text-slate-500">Title Name</label>
                   <input
                     type="text"
                     required
@@ -267,17 +267,17 @@ export default function AdminServicesCRUD() {
                         setSlug(e.target.value.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, ''));
                       }
                     }}
-                    className="w-full rounded border border-[rgba(197,168,128,0.15)] bg-[rgba(255,255,255,0.02)] px-3 py-2.5 text-foreground focus:outline-none focus:border-primary"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-slate-800 focus:outline-none focus:border-[#0D9488] focus:ring-1 focus:ring-[#0D9488]"
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-[10px] uppercase font-bold text-muted">Slug URL</label>
+                  <label className="text-[10px] uppercase font-black text-slate-500">Slug URL</label>
                   <input
                     type="text"
                     required
                     value={slug}
                     onChange={(e) => setSlug(e.target.value.toLowerCase())}
-                    className="w-full rounded border border-[rgba(197,168,128,0.15)] bg-[rgba(255,255,255,0.02)] px-3 py-2.5 text-foreground focus:outline-none focus:border-primary"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-slate-800 focus:outline-none focus:border-[#0D9488] focus:ring-1 focus:ring-[#0D9488]"
                   />
                 </div>
               </div>
@@ -285,60 +285,60 @@ export default function AdminServicesCRUD() {
               {/* Row 2: Icon & Order */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-[10px] uppercase font-bold text-muted">Lucide Icon Identifier</label>
+                  <label className="text-[10px] uppercase font-black text-slate-500">Lucide Icon Identifier</label>
                   <input
                     type="text"
                     required
                     value={icon}
                     onChange={(e) => setIcon(e.target.value)}
                     placeholder="Cpu, BrainCircuit, Cloud, Database"
-                    className="w-full rounded border border-[rgba(197,168,128,0.15)] bg-[rgba(255,255,255,0.02)] px-3 py-2.5 text-foreground focus:outline-none focus:border-primary"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-slate-800 focus:outline-none focus:border-[#0D9488] focus:ring-1 focus:ring-[#0D9488]"
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-[10px] uppercase font-bold text-muted">Display Order</label>
+                  <label className="text-[10px] uppercase font-black text-slate-500">Display Order</label>
                   <input
                     type="number"
                     required
                     value={order}
                     onChange={(e) => setOrder(parseInt(e.target.value) || 0)}
-                    className="w-full rounded border border-[rgba(197,168,128,0.15)] bg-[rgba(255,255,255,0.02)] px-3 py-2.5 text-foreground focus:outline-none focus:border-primary"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-slate-800 focus:outline-none focus:border-[#0D9488]"
                   />
                 </div>
               </div>
 
               {/* Row 3: Short Description */}
               <div className="space-y-1.5">
-                <label className="text-[10px] uppercase font-bold text-muted">Short Abstract</label>
+                <label className="text-[10px] uppercase font-black text-slate-500">Short Abstract</label>
                 <textarea
                   rows={2}
                   required
                   value={shortDesc}
                   onChange={(e) => setShortDesc(e.target.value)}
-                  className="w-full rounded border border-[rgba(197,168,128,0.15)] bg-[rgba(255,255,255,0.02)] px-3 py-2.5 text-foreground focus:outline-none focus:border-primary resize-none"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-slate-800 focus:outline-none focus:border-[#0D9488] focus:ring-1 focus:ring-[#0D9488] resize-none"
                 />
               </div>
 
               {/* Row 4: Full Content */}
               <div className="space-y-1.5">
-                <label className="text-[10px] uppercase font-bold text-muted">Full Capability Explanation</label>
+                <label className="text-[10px] uppercase font-black text-slate-500">Full Capability Explanation</label>
                 <textarea
                   rows={4}
                   required
                   value={fullContent}
                   onChange={(e) => setFullContent(e.target.value)}
-                  className="w-full rounded border border-[rgba(197,168,128,0.15)] bg-[rgba(255,255,255,0.02)] px-3 py-2.5 text-foreground focus:outline-none focus:border-primary resize-none"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-slate-800 focus:outline-none focus:border-[#0D9488] focus:ring-1 focus:ring-[#0D9488] resize-none"
                 />
               </div>
 
               {/* Features Array builder */}
-              <div className="space-y-4 pt-2 border-t border-white/5">
+              <div className="space-y-4 pt-2 border-t border-slate-100">
                 <div className="flex justify-between items-center">
-                  <span className="text-[10px] uppercase font-bold tracking-widest text-primary">Service Sub-Features ({features.length})</span>
+                  <span className="text-[10px] uppercase font-black tracking-widest text-[#0D9488]">Service Sub-Features ({features.length})</span>
                   <button
                     type="button"
                     onClick={addFeatureInput}
-                    className="text-[9px] uppercase tracking-wider font-bold bg-white/5 border border-white/10 text-foreground px-2.5 py-1 rounded hover:bg-white/10 cursor-pointer flex items-center space-x-1"
+                    className="text-[9px] uppercase tracking-wider font-black bg-slate-50 border border-slate-200 text-slate-600 px-2.5 py-1.5 rounded-xl hover:bg-slate-100 cursor-pointer flex items-center space-x-1"
                   >
                     <Plus className="h-3 w-3" />
                     <span>Add Feature</span>
@@ -347,7 +347,7 @@ export default function AdminServicesCRUD() {
                 
                 <div className="space-y-3 max-h-40 overflow-y-auto pr-1">
                   {features.map((feat, idx) => (
-                    <div key={idx} className="flex gap-2 items-center bg-[#0d0d12] border border-white/5 p-3 rounded">
+                    <div key={idx} className="flex gap-2 items-center bg-slate-50 border border-slate-100 p-3 rounded-xl">
                       <div className="flex-1 space-y-2">
                         <input
                           type="text"
@@ -355,7 +355,7 @@ export default function AdminServicesCRUD() {
                           value={feat.title}
                           onChange={(e) => handleFeatureChange(idx, 'title', e.target.value)}
                           placeholder="Feature Title (e.g. Model Tuning)"
-                          className="w-full bg-[#050507] border border-white/5 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none"
+                          className="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:outline-none"
                         />
                         <input
                           type="text"
@@ -363,13 +363,13 @@ export default function AdminServicesCRUD() {
                           value={feat.description}
                           onChange={(e) => handleFeatureChange(idx, 'description', e.target.value)}
                           placeholder="Feature detail explanation..."
-                          className="w-full bg-[#050507] border border-white/5 rounded px-2.5 py-1.5 text-xs text-muted focus:outline-none"
+                          className="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-500 focus:outline-none"
                         />
                       </div>
                       <button
                         type="button"
                         onClick={() => removeFeatureInput(idx)}
-                        className="text-muted hover:text-red-400 p-2 rounded hover:bg-red-500/10 cursor-pointer shrink-0"
+                        className="text-slate-400 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 cursor-pointer shrink-0 transition-colors"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
@@ -379,27 +379,27 @@ export default function AdminServicesCRUD() {
               </div>
 
               {/* Submit */}
-              <div className="flex justify-end space-x-3 pt-6 border-t border-white/5">
+              <div className="flex justify-end space-x-3 pt-6 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="border border-white/10 text-muted px-5 py-2.5 rounded hover:bg-white/5 transition-all text-xs font-bold uppercase tracking-wider cursor-pointer"
+                  className="border border-slate-200 text-slate-500 px-5 py-2.5 rounded-xl hover:bg-slate-50 transition-all text-xs font-black uppercase tracking-wider cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={saveMutation.isPending}
-                  className="bg-gold-gradient text-background px-6 py-2.5 rounded hover:shadow-[0_0_15px_rgba(197,168,128,0.25)] transition-all text-xs font-bold uppercase tracking-wider cursor-pointer flex items-center space-x-1.5 disabled:opacity-50"
+                  className="bg-[#FF7A00] text-white hover:bg-[#E06C00] shadow-md shadow-amber-500/20 px-6 py-2.5 rounded-xl transition-all text-xs font-black uppercase tracking-wider cursor-pointer flex items-center space-x-1.5 disabled:opacity-50"
                 >
                   {saveMutation.isPending ? (
                     <>
-                      <Loader2 className="h-4 w-4 animate-spin text-background" />
+                      <Loader2 className="h-4 w-4 animate-spin text-white" />
                       <span>Saving...</span>
                     </>
                   ) : (
                     <>
-                      <Save className="h-4 w-4 text-background" />
+                      <Save className="h-4 w-4 text-white" />
                       <span>Save Capability</span>
                     </>
                   )}
@@ -407,7 +407,7 @@ export default function AdminServicesCRUD() {
               </div>
 
               {errorMsg && (
-                <div className="p-3 border border-red-500/20 bg-red-500/5 text-red-400 text-[10px] rounded flex items-center space-x-2">
+                <div className="p-3 border border-red-200 bg-red-50 text-red-600 text-[10px] rounded-xl flex items-center space-x-2">
                   <X className="h-4 w-4 shrink-0" />
                   <span>{errorMsg}</span>
                 </div>

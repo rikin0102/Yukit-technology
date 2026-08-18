@@ -6,9 +6,10 @@ import { motion } from 'framer-motion';
 interface Card3DTiltProps {
   children: React.ReactNode;
   className?: string;
+  glareColor?: string; // e.g., "rgba(255, 122, 0, 0.4)"
 }
 
-export const Card3DTilt: React.FC<Card3DTiltProps> = ({ children, className = '' }) => {
+export const Card3DTilt: React.FC<Card3DTiltProps> = ({ children, className = '', glareColor }) => {
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [transform, setTransform] = useState('rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)');
   const [glarePos, setGlarePos] = useState({ x: 50, y: 50, opacity: 0 });
@@ -40,8 +41,11 @@ export const Card3DTilt: React.FC<Card3DTiltProps> = ({ children, className = ''
     setGlarePos((prev) => ({ ...prev, opacity: 0 }));
   };
 
+  // Determine glare background gradient color (default to orange brand color)
+  const spotColor = glareColor || 'rgba(255, 122, 0, 0.4)';
+
   return (
-    <div className="perspective-1000 w-full flex justify-center">
+    <div className="perspective-1000 w-full flex justify-center h-full">
       <motion.div
         ref={cardRef}
         onMouseMove={handleMouseMove}
@@ -51,18 +55,18 @@ export const Card3DTilt: React.FC<Card3DTiltProps> = ({ children, className = ''
           transition: 'transform 0.15s ease-out',
           transformStyle: 'preserve-3d',
         }}
-        className={`relative overflow-hidden rounded-3xl cursor-pointer select-none ${className}`}
+        className={`relative overflow-hidden rounded-3xl cursor-pointer select-none h-full w-full ${className}`}
       >
         {/* Dynamic Mouse Glare Spotlight */}
         <div
           className="pointer-events-none absolute inset-0 z-20 transition-opacity duration-300 rounded-3xl"
           style={{
-            background: `radial-gradient(circle at ${glarePos.x}% ${glarePos.y}%, rgba(255, 255, 255, ${glarePos.opacity}) 0%, rgba(255, 122, 0, ${glarePos.opacity * 0.4}) 35%, transparent 70%)`,
+            background: `radial-gradient(circle at ${glarePos.x}% ${glarePos.y}%, rgba(255, 255, 255, ${glarePos.opacity}) 0%, ${spotColor.replace('0.4', (glarePos.opacity * 0.4).toString())} 35%, transparent 70%)`,
           }}
         />
 
         {/* Card Content with 3D Depth */}
-        <div style={{ transformStyle: 'preserve-3d' }}>
+        <div style={{ transformStyle: 'preserve-3d' }} className="h-full">
           {children}
         </div>
       </motion.div>

@@ -17,6 +17,7 @@ class Project(models.Model):
     long_description = models.TextField(help_text="Full case study breakdown.")
     client = models.CharField(max_length=100, blank=True, null=True)
     industry = models.CharField(max_length=100, blank=True, null=True)
+    tech_stack = models.CharField(max_length=500, blank=True, null=True, help_text="Comma-separated technologies used, e.g. React, Next.js, Django")
     services_rendered = models.ManyToManyField(Service, related_name='projects', blank=True)
     live_url = models.URLField(blank=True, null=True)
     github_url = models.URLField(blank=True, null=True)

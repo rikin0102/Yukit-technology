@@ -71,8 +71,15 @@ function AnimatedMetric({
     }
   }, [isInView, value]);
 
+  let glareColor = 'rgba(255, 122, 0, 0.4)'; // Default orange
+  if (value === '8+') {
+    glareColor = 'rgba(37, 99, 235, 0.4)'; // Blue
+  } else if (value === '24/7') {
+    glareColor = 'rgba(13, 148, 136, 0.4)'; // Green/Teal
+  }
+
   return (
-    <Card3DTilt>
+    <Card3DTilt glareColor={glareColor}>
       <motion.div
         ref={ref}
         initial={{ opacity: 0, y: 25 }}
@@ -196,43 +203,55 @@ const whyYuktiPoints = [
   },
 ];
 
-// Single-line 3D Technology Showcase Items
-const techShowcaseItems = [
-  // FRONTEND
-  { name: 'Next.js', category: 'FRONTEND', icon: '⚡', border: 'hover:border-slate-800', badgeBg: 'bg-slate-900/10 text-slate-900' },
-  { name: 'React', category: 'FRONTEND', icon: '⚛️', border: 'hover:border-cyan-500', badgeBg: 'bg-cyan-500/10 text-cyan-600' },
-  { name: 'TypeScript', category: 'FRONTEND', icon: '🔷', border: 'hover:border-blue-600', badgeBg: 'bg-blue-600/10 text-blue-600' },
-  { name: 'Tailwind CSS', category: 'FRONTEND', icon: '🎨', border: 'hover:border-teal-500', badgeBg: 'bg-teal-500/10 text-teal-600' },
-
-  // BACKEND
-  { name: 'Python', category: 'BACKEND', icon: '🐍', border: 'hover:border-amber-500', badgeBg: 'bg-amber-500/10 text-amber-600' },
-  { name: 'Django', category: 'BACKEND', icon: '🎯', border: 'hover:border-emerald-600', badgeBg: 'bg-emerald-600/10 text-emerald-600' },
-  { name: 'FastAPI', category: 'BACKEND', icon: '🚀', border: 'hover:border-sky-500', badgeBg: 'bg-sky-500/10 text-sky-600' },
-  { name: 'REST APIs', category: 'BACKEND', icon: '🔗', border: 'hover:border-indigo-600', badgeBg: 'bg-indigo-600/10 text-indigo-600' },
-
-  // AI & MACHINE LEARNING
-  { name: 'OpenAI', category: 'AI & ML', icon: '🤖', border: 'hover:border-emerald-500', badgeBg: 'bg-emerald-500/10 text-emerald-600' },
-  { name: 'LangChain', category: 'AI & ML', icon: '🦜', border: 'hover:border-orange-500', badgeBg: 'bg-orange-500/10 text-orange-600' },
-  { name: 'Hugging Face', category: 'AI & ML', icon: '🤗', border: 'hover:border-yellow-500', badgeBg: 'bg-yellow-500/10 text-yellow-600' },
-  { name: 'RAG', category: 'AI & ML', icon: '🧠', border: 'hover:border-purple-600', badgeBg: 'bg-purple-600/10 text-purple-600' },
-  { name: 'Machine Learning', category: 'AI & ML', icon: '📊', border: 'hover:border-blue-500', badgeBg: 'bg-blue-500/10 text-blue-600' },
-
-  // DATABASE
-  { name: 'PostgreSQL', category: 'DATABASE', icon: '🐘', border: 'hover:border-blue-700', badgeBg: 'bg-blue-700/10 text-blue-700' },
-  { name: 'MySQL', category: 'DATABASE', icon: '🐬', border: 'hover:border-sky-600', badgeBg: 'bg-sky-600/10 text-sky-600' },
-  { name: 'Redis', category: 'DATABASE', icon: '🔴', border: 'hover:border-red-600', badgeBg: 'bg-red-600/10 text-red-600' },
-
-  // DEVOPS & CLOUD
-  { name: 'Docker', category: 'DEVOPS & CLOUD', icon: '🐳', border: 'hover:border-sky-500', badgeBg: 'bg-sky-500/10 text-sky-600' },
-  { name: 'Nginx', category: 'DEVOPS & CLOUD', icon: '🟢', border: 'hover:border-green-600', badgeBg: 'bg-green-600/10 text-green-600' },
-  { name: 'Linux', category: 'DEVOPS & CLOUD', icon: '🐧', border: 'hover:border-slate-800', badgeBg: 'bg-slate-800/10 text-slate-800' },
-  { name: 'AWS', category: 'DEVOPS & CLOUD', icon: '☁️', border: 'hover:border-amber-500', badgeBg: 'bg-amber-500/10 text-amber-600' },
-  { name: 'GitHub Actions', category: 'DEVOPS & CLOUD', icon: '⚡', border: 'hover:border-indigo-500', badgeBg: 'bg-indigo-500/10 text-indigo-600' },
+// Default technology logo image paths
+const DEFAULT_TECH_LOGOS = [
+  '/images/tech/typescript.png',
+  '/images/tech/html5.png',
+  '/images/tech/css3.png',
+  '/images/tech/python.png',
+  '/images/tech/Figma-Logo.png',
+  '/images/tech/Kotlin-Foundation-Logo-Vector-730x730.jpg',
+  '/images/tech/ai.avif',
+  '/images/tech/aws.png',
+  '/images/tech/canva.png',
+  '/images/tech/devops.avif',
+  '/images/tech/django.png',
+  '/images/tech/fastapi.png',
+  '/images/tech/gemini.png',
+  '/images/tech/git.webp',
+  '/images/tech/github.png',
+  '/images/tech/grok.png',
+  '/images/tech/hugging face.webp',
+  '/images/tech/js.webp',
+  '/images/tech/langchain.jpeg',
+  '/images/tech/linux.png',
+  '/images/tech/llm.webp',
+  '/images/tech/mern.jpg',
+  '/images/tech/ml.png',
+  '/images/tech/mysql.png',
+  '/images/tech/nextjs.jpeg',
+  '/images/tech/openai.png',
+  '/images/tech/postgrasql.png',
+  '/images/tech/rag.webp',
+  '/images/tech/react js.png',
+  '/images/tech/redis.png',
+  '/images/tech/restapi.jpg',
+  '/images/tech/tailwind.webp',
+  '/images/tech/ui-ux-designer-icon-design-free-vector.jpg',
+  '/images/tech/windows.png',
 ];
 
 export default function AboutPage() {
+  // Use the full set of 34 logos for marqueeItems loop
+  const marqueeItems = [...DEFAULT_TECH_LOGOS, ...DEFAULT_TECH_LOGOS];
+
   return (
-    <div className="relative min-h-screen text-[#334155] py-16 sm:py-24">
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      className="relative min-h-screen text-[#334155] py-16 sm:py-24"
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-24 relative z-10">
 
         {/* ------------------- 1. HERO / WHO WE ARE SECTION ------------------- */}
@@ -367,10 +386,10 @@ export default function AboutPage() {
               return (
                 <Card3DTilt key={card.num}>
                   <motion.div
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 25 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: idx * 0.12 }}
+                    viewport={{ once: true, margin: '-60px' }}
+                    transition={{ duration: 0.65, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
                     className="h-full rounded-2xl bg-white p-7 shadow-lg border border-slate-200/90 flex flex-col justify-between space-y-6 glass-card-hover group relative overflow-hidden transform-style-3d"
                   >
                     <div className="space-y-4">
@@ -408,42 +427,33 @@ export default function AboutPage() {
               Technology Behind Our Solutions
             </h2>
             <p className="text-xs sm:text-sm text-[#64748B]">
-              Continuous 3D right-to-left technology pipeline (Hover any badge to pause)
+              Continuous right-to-left technology pipeline (Hover to pause)
             </p>
           </div>
 
-          {/* Single-Line Right-to-Left 3D Moving Marquee */}
-          <div className="relative overflow-hidden w-full py-6">
+          {/* Single-Line Right-to-Left Moving Marquee */}
+          <div className="relative overflow-hidden w-full py-10 bg-slate-50/50 rounded-3xl">
             {/* Fade Edges Overlay */}
-            <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#FDFBF7] to-transparent z-20 pointer-events-none" />
-            <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#FDFBF7] to-transparent z-20 pointer-events-none" />
+            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#FDFBF7] via-[#FDFBF7]/80 to-transparent z-20 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#FDFBF7] via-[#FDFBF7]/80 to-transparent z-20 pointer-events-none" />
 
             <motion.div
               animate={{ x: ['0%', '-50%'] }}
               transition={{
                 repeat: Infinity,
                 repeatType: 'loop',
-                duration: 34,
+                duration: 90,
                 ease: 'linear',
               }}
-              className="flex space-x-5 w-max hover:[animation-play-state:paused] perspective-1000"
+              className="flex flex-nowrap items-center space-x-24 w-max hover:[animation-play-state:paused]"
             >
-              {[...techShowcaseItems, ...techShowcaseItems].map((item, idx) => (
-                <div
-                  key={idx}
-                  className={`flex items-center space-x-3.5 px-6 py-4 rounded-2xl bg-white border border-slate-200/90 shadow-md ${item.border} hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 group cursor-pointer transform-style-3d`}
-                >
-                  <span className="text-2xl group-hover:scale-125 transition-transform duration-300">
-                    {item.icon}
-                  </span>
-                  <div>
-                    <h4 className="text-sm font-extrabold text-[#0F172A] group-hover:text-[#FF7A00] transition-colors">
-                      {item.name}
-                    </h4>
-                    <span className={`text-[9px] font-black tracking-widest px-2 py-0.5 rounded-md ${item.badgeBg}`}>
-                      {item.category}
-                    </span>
-                  </div>
+              {marqueeItems.map((src, idx) => (
+                <div key={idx} className="flex items-center justify-center select-none shrink-0 px-4">
+                  <img
+                    src={src}
+                    alt="technology logo"
+                    className="h-12 sm:h-16 w-auto object-contain transition-transform duration-300 hover:scale-110"
+                  />
                 </div>
               ))}
             </motion.div>
@@ -471,10 +481,10 @@ export default function AboutPage() {
               return (
                 <Card3DTilt key={point.num}>
                   <motion.div
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 25 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5 }}
+                    viewport={{ once: true, margin: '-60px' }}
+                    transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
                     className="h-full rounded-2xl bg-white p-7 shadow-lg border border-slate-200/90 flex flex-col justify-between space-y-6 glass-card-hover group relative overflow-hidden transform-style-3d"
                   >
                     <div className="space-y-4">
@@ -551,6 +561,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-    </div>
+    </motion.div>
   );
 }
